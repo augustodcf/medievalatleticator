@@ -18,7 +18,7 @@
 
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Medieval Fights</a>
+  <a class="navbar-brand" href="#">Atleticator</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#conteudoNavbarSuportado" aria-controls="conteudoNavbarSuportado" aria-expanded="false" aria-label="Alterna navegação">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -28,46 +28,19 @@
       <li class="nav-item active">
         <a class="nav-link" href="http://localhost:5000/">Home</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Clubs</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Fighters</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Teams</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Events</a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Sports
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Buhurt</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Hema</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Jousting</a>
-        </div>
-      </li>
       {% if current_user.is_authenticated %}
-      <li class="nav-item dropdown" >
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <img src='/static/img/icons/person.png' style='width: 20px; height: 20px'>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="/pagecontrol">Page Control</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Personal</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Adds</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Analytics</a>
-        </div>
- 
+      <li class="nav-item">
+        <a class="nav-link" href="#">Loja</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Associação</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Fórum</a>
+      </li>
       {% endif %}
+      
+
       <!--li class="nav-item"-->
         <!-- <a class="nav-link disabled" href="#">Desativado</a> -->
       <!--/li-->
