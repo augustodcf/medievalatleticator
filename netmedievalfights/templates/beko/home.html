@@ -1,0 +1,372 @@
+
+
+
+
+
+
+{% extends 'beko/navbar.html' %}
+{% block styles -%}
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> 
+    <!--link rel="stylesheet" type="text/css" href="{{url_for('static', filename='/css/bootstrap.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='/css/bootstrap-theme.css')}}"-->
+
+{% endblock %}
+
+
+
+<style>
+ .jumbotron {
+  margin-top: 1em;  // add a little space
+}
+
+#slide_background {
+  transition: all 0.3s 0.3s;
+}
+#slide,
+#slide_wrapper {
+  transition: all 0.3s ease-out;
+}
+#slide {
+  transform: translateX(0) translateY(-40%);
+}
+.popup_visible #slide {
+  transform: translateX(0) translateY(0);
+}
+
+
+
+.container
+{
+    margin-top: 5px;
+    width: 98%;
+}
+
+
+
+p
+{
+    padding: 0px;
+}
+.form-signin
+{
+
+    text-align: center;
+    margin: auto;
+    width: 300px;
+}
+
+
+.col-md-12
+{
+    width:100%;
+}
+
+.alert
+{
+    width: 300px;
+    margin: auto;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.panel-title
+{
+    padding-top:0px;
+}
+
+.navbar-brand, .navbar>.container-fluid .navbar-brand
+{
+    background-image: url(/favicon.ico);
+    background-repeat: no-repeat;
+    font-size: 32px;
+    padding-left: 60px;
+    margin-left: 5px;
+}
+
+.navbar-nav
+{
+    float: right;
+    flex-direction: row;
+}
+
+.navbar
+{
+    margin-botton:0px;
+}
+
+#map {
+    height: 400px;
+}
+
+.formfield
+{
+    padding: 10px;
+}
+
+.td, .th{
+    table-layout: fixed;
+    word-wrap: break-word;
+    word-break: break-all;
+    padding: 0px;
+    vertical-align: baseline;
+}
+
+.btn-alignRight {
+    float: right;
+}
+
+.btn-group
+{
+    display: flex;
+}
+.btn-group>.btn
+{
+    width: 40px;
+}
+
+.profile_img
+{
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+}
+
+.profile_head
+{
+    padding-botton: 20px;
+    text-align: center;
+}
+
+.profile_body
+{
+    padding-botton: 20px;
+    text-align: center;
+}
+
+.profile_footer
+{
+    text-align: center;
+}
+
+</style>
+
+{% block content %}
+
+<!--script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script-->
+
+
+
+
+<body >
+
+
+{# Loads some of the macros included with Flask-Bootstrap. We are using the
+   utils module here to automatically render Flask's flashed messages in a
+   bootstrap friendly manner #}
+{% import "bootstrap/utils.html" as utils %}
+
+{%- with messages = get_flashed_messages(with_categories=True) %}
+ {%- if messages %}
+    <div class="row">
+      <div class="col-md-12">
+        {{utils.flashed_messages(messages)}}
+      </div>
+    </div>
+  {%- endif %}
+  {%- endwith %}
+
+<!-- barra lateral -->
+
+<style>
+
+    .wrapper {
+    display: flex;
+    align-items: stretch;
+}
+
+#sidebar {
+    min-width: 250px;
+    max-width: 250px;
+}
+
+#sidebar.active {
+    margin-left: -250px;
+}
+
+a[data-toggle="collapse"] {
+    position: relative;
+}
+
+.dropdown-toggle::after {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+}
+
+@media (max-width: 768px) {
+    #sidebar {
+        margin-left: -250px;
+    }
+    #sidebar.active {
+        margin-left: 0;
+    }
+}
+
+#sidebar {
+    /* don't forget to add all the previously mentioned styles here too */
+    background: #7386D5;
+    color: #fff;
+    transition: all 0.3s;
+}
+
+#sidebar .sidebar-header {
+    padding: 20px;
+    background: #6d7fcc;
+}
+
+#sidebar ul.components {
+    padding: 20px 0;
+    border-bottom: 1px solid #47748b;
+}
+
+#sidebar ul p {
+    color: #fff;
+    padding: 10px;
+}
+
+#sidebar ul li a {
+    padding: 10px;
+    font-size: 1.1em;
+    display: block;
+}
+#sidebar ul li a:hover {
+    color: #7386D5;
+    background: #fff;
+}
+
+#sidebar ul li.active > a, a[aria-expanded="true"] {
+    color: #fff;
+    background: #6d7fcc;
+}
+ul ul a {
+    font-size: 0.9em !important;
+    padding-left: 30px !important;
+    background: #6d7fcc;
+}
+
+</style>
+
+ <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function () {
+
+    $('#sidebarCollapse').on('click', function () {
+        $('#sidebar').toggleClass('active');
+    });
+
+});
+    </script>
+
+<div class="wrapper">
+    <!-- Sidebar -->
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h1>{{ username }}</h1>
+        </div>
+
+        <ul class="list-unstyled components">
+            <p>Dummy Heading</p>
+            <li class="active">
+                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
+                <ul class="collapse list-unstyled" id="homeSubmenu">
+                    <li>
+                        <a href="#">Home 1</a>
+                    </li>
+                    <li>
+                        <a href="#">Home 2</a>
+                    </li>
+                    <li>
+                        <a href="#">Home 3</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">About</a>
+            </li>
+            <li>
+                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
+                <ul class="collapse list-unstyled" id="pageSubmenu">
+                    <li>
+                        <a href="#">Page 1</a>
+                    </li>
+                    <li>
+                        <a href="#">Page 2</a>
+                    </li>
+                    <li>
+                        <a href="#">Page 3</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">Portfolio</a>
+            </li>
+            <li>
+                <a href="#">Contact</a>
+            </li>
+        </ul>
+    </nav>
+
+</div>
+
+<!--
+<video style="z-index:-1;" src="{{url_for('static', filename='video/armadures.mp4')}}" autoplay="true" loop="true" width="100%" muted="true">
+</video>
+
+<n1>
+
+    <search> PESQUISA </search>
+    <news> TESTE </news>
+
+</n1>
+
+<style>
+
+    n1 {
+    position: absolute; 
+    top: 12%; 
+    left: 0; 
+    width: 100%;
+    height: 100%;
+
+
+    }
+    n1 news {
+    position: relative; 
+    width: 50%;
+    height: 100%;
+    float: right;
+    background-image: linear-gradient(rgba(0%, 0%, 0%, .0), black);
+
+    n1 search{
+    position: relative; 
+    width: 50%;
+    float: left;
+
+    }
+}
+-->
+{% endblock %}
+</body>
+

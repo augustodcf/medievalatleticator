@@ -277,6 +277,13 @@ class editorform(FlaskForm):
 def index():
     return render_template("beko/index.html")
 
+@app.route("/home", methods=["GET", "POST"])
+def home():
+    user = User.query.filter_by(idUser=str(current_user).strip('<>').replace('User ', '')).first()
+
+    return render_template("beko/home.html", username=user.username)
+
+
 @app.route("/terms")
 def terms():
     return render_template("beko/terms.html")
