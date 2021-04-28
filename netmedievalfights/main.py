@@ -18,7 +18,7 @@ if not os.path.exists(app.config['UPLOAD_FOLDER']):
 Bootstrap(app)
 Debug(app)
 app.secret_key = b"""_5#y2L"F4Q8z\n\xec]/"""
-app.config["SQLALCHEMY_DATABASE_URI"] = """mysql://root:6=2Cxl{3t6}g[pD@localhost/medievalfights"""
+app.config["SQLALCHEMY_DATABASE_URI"] = """mysql://root:6=2Cxl{3t6}g[pD@localhost/atleticator"""
 db = SQLAlchemy(app)
 nav = Nav()
 
@@ -26,24 +26,42 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 
-class User_has_page(db.Model):
-    user_id = db.Column(db.Integer, db.ForeignKey('user.idUser'), primary_key=True)
-    page_idpage = db.Column(db.Integer, db.ForeignKey('page.idpage'), primary_key=True)
-    user_has_page_relationtype = db.Column(db.String(1), unique=False, nullable=True)
 
-    user = db.relationship('User', back_populates='pages')
-    page = db.relationship('Page', back_populates='users')
 
+
+# >>>>>>>>>>> user do medievalfights <<<<<<<<<<<<<<<<<<<<<<<
+
+#class User(db.Model):
+#    idUser = db.Column(db.Integer, primary_key=True, autoincrement=True)
+#    username = db.Column(db.String(255), unique=True, nullable=False)
+#    password = db.Column(db.String(45), unique=True, nullable=True)
+#    email = db.Column(db.String(45), unique=False, nullable=True)
+#    active = db.Column(db.Boolean, unique=False, nullable=True, default=True)
+#    authenticated = False
+#    power = db.Column(db.Integer, unique=False, nullable=True, default=None)
+#    pages = db.relationship('User_has_page', back_populates='user')
+
+#    def is_authenticated(self):
+#        return self.authenticated
+
+#    def is_active(self):
+#        return self.active
+
+#    def is_anonymous(self):
+#        return False
+
+#    def get_id(self):
+#        return self.idUser
 
 class User(db.Model):
+    username = db.Column(db.String(16), unique=True, nullable=False)
+    email = db.Column(db.String(255), unique=True, nullable=False)
+    password = db.Column(db.String(32), unique=False, nullable=False)
+    create_time = db.Column(db.DateTime, unique=False, nullable=True)
     idUser = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String(255), unique=True, nullable=False)
-    password = db.Column(db.String(45), unique=True, nullable=True)
-    email = db.Column(db.String(45), unique=False, nullable=True)
-    active = db.Column(db.Boolean, unique=False, nullable=True, default=True)
-    authenticated = False
-    power = db.Column(db.Integer, unique=False, nullable=True, default=None)
-    pages = db.relationship('User_has_page', back_populates='user')
+    delete = db.Column(db.Integer,  unique=False, nullable=True)
+    power = db.Column(db.String(45), unique=False, nullable=True)
+    dataNasc = db.Column(db.DateTime, unique=False, nullable=True)
 
     def is_authenticated(self):
         return self.authenticated
@@ -57,36 +75,78 @@ class User(db.Model):
     def get_id(self):
         return self.idUser
 
-
 @login_manager.user_loader
 def load_user(user_id):
     user = User.query.filter_by(idUser=user_id).first()
     print(user)
     return user
 
+class News(db.Model):
+    news_id =  db.Column(db.Integer, primary_key=True, autoincrement=True)
+    img = db.Column(db.String(255), unique=True, nullable=False)
+    htmlinterno = db.Column(db.String(45), unique=True, nullable=False)
+    titulo = db.Column(db.String(45), unique=False, nullable=False)
+    delete = db.Column(db.SmallInteger,  unique=False, nullable=True)
+
+class User_has_news(db.Model):
+    user_idUser = db.Column(db.Integer, primary_key=True, nullable=False)
+    news_news_id = db.Column(db.Integer, primary_key=True, nullable=False)
+    new = db.Column(db.SmallInteger,  unique=False, nullable=True)
+
+class Associacao(db.Model):
+    assoc_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(255), unique=True, nullable=False)
+    user_idUser = db.Column(db.Integer, nullable=False)
+    idAssoc = db.Column(db.String(45), unique=True, nullable=False)
+    pagamento = db.Column(db.SmallInteger,  unique=False, nullable=True)
+
+class Produto(db.Model):
+    produto_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(255), unique=True, nullable=False)
+    descricao = db.Column(db.String(45), unique=False, nullable=True)
+    preco = db.Column(db.Float, unique=False, nullable=False)
+    esconder = db.Column(db.SmallInteger,  unique=False, nullable=True)
+
+class Cor(db.Model):
+    tamanho_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(255), unique=True, nullable=False)
+    produto_produto_id = db.Column(db.Integer, unique=False, nullable=False)
+
+class Tamanho(db.Model):
+    tamanho_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(255), unique=True, nullable=False)
+    produto_produto_id = db.Column(db.Integer, unique=False, nullable=False)
+
+#class User_has_page(db.Model):
+#    user_id = db.Column(db.Integer, db.ForeignKey('user.idUser'), primary_key=True)
+#    page_idpage = db.Column(db.Integer, db.ForeignKey('page.idpage'), primary_key=True)
+#    user_has_page_relationtype = db.Column(db.String(1), unique=False, nullable=True)
+
+#    user = db.relationship('User', back_populates='pages')
+#    page = db.relationship('Page', back_populates='users')
 
 
-class Page(db.Model):
-    idpage = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    nome = db.Column(db.String(45), unique=True, nullable=False)
-    icone = db.Column(db.String(45), unique=True, nullable=True)
-    header = db.Column(db.String(45), unique=False, nullable=True)
-    background = db.Column(db.String(45), unique=False, nullable=True)
-    status = db.Column(db.Integer(), unique=False, nullable=True)
-    pagetypeid = db.Column(db.Integer(), unique=False, nullable=True)
-    users = db.relationship('User_has_page', back_populates='page')
+#class Page(db.Model):
+#    idpage = db.Column(db.Integer, primary_key=True, autoincrement=True)
+#    nome = db.Column(db.String(45), unique=True, nullable=False)
+#    icone = db.Column(db.String(45), unique=True, nullable=True)
+#    header = db.Column(db.String(45), unique=False, nullable=True)
+#    background = db.Column(db.String(45), unique=False, nullable=True)
+#    status = db.Column(db.Integer(), unique=False, nullable=True)
+#    pagetypeid = db.Column(db.Integer(), unique=False, nullable=True)
+#    users = db.relationship('User_has_page', back_populates='page')
 
 
 
-    def fetchPageTypeObject(self):
-        tempObject = None
-        if self.pagetypeid is None:
-            tempObject = None
-        elif self.pagetypeid < 3:
-            tempObject = pageTypeDict[self.pagetypeid](page_idpage=self.idpage).first()
-        else:
-            tempObject = pageTypeDict[self.pagetypeid](page_idpage=self.idpage, type=self.pagetypeid-3).first()
-        return tempObject
+ #   def fetchPageTypeObject(self):
+ #       tempObject = None
+ #       if self.pagetypeid is None:
+ #           tempObject = None
+ #       elif self.pagetypeid < 3:
+ #           tempObject = pageTypeDict[self.pagetypeid](page_idpage=self.idpage).first()
+ #       else:
+ #           tempObject = pageTypeDict[self.pagetypeid](page_idpage=self.idpage, type=self.pagetypeid-3).first()
+ #       return tempObject
 
     # User_idUser = db.Column(db.Integer, db.ForeignKey('User.idUser'),
     # nullable=False)
@@ -94,77 +154,77 @@ class Page(db.Model):
     #    backref=db.backref('user', lazy=True))
 
 
-class Fighter(db.Model):
-    idfighter = db.Column(db.Integer, primary_key=True)
-    fighterName = db.Column(db.String(255), unique=True, nullable=True)
-    fighterAge = db.Column(db.Integer(), unique=False, nullable=True)
-    fighterWeight = db.Column(db.Float(), unique=False, nullable=True)
-    fighterHeight = db.Column(db.Float(), unique=False, nullable=True)
-    fighterMainHand = db.Column(db.String(1), unique=False, nullable=True)
-    fighterEmail = db.Column(db.String(255), unique=False, nullable=True)
-    fighterGif = db.Column(db.String(255), unique=True, nullable=True)
-    fighterSex = db.Column(db.String(1), unique=False, nullable=True)
-    fighterNacionality = db.Column(db.String(30), unique=False, nullable=True)
-    page_idpage = db.Column(db.Integer(), unique=True, nullable=False)
+#class Fighter(db.Model):
+#    idfighter = db.Column(db.Integer, primary_key=True)
+#    fighterName = db.Column(db.String(255), unique=True, nullable=True)
+#    fighterAge = db.Column(db.Integer(), unique=False, nullable=True)
+#    fighterWeight = db.Column(db.Float(), unique=False, nullable=True)
+#    fighterHeight = db.Column(db.Float(), unique=False, nullable=True)
+#    fighterMainHand = db.Column(db.String(1), unique=False, nullable=True)
+#    fighterEmail = db.Column(db.String(255), unique=False, nullable=True)
+#    fighterGif = db.Column(db.String(255), unique=True, nullable=True)
+#    fighterSex = db.Column(db.String(1), unique=False, nullable=True)
+#    fighterNacionality = db.Column(db.String(30), unique=False, nullable=True)
+#    page_idpage = db.Column(db.Integer(), unique=True, nullable=False)
 
-    def __repr__(self):
-        return '<User %r>' % self.username
+#    def __repr__(self):
+#        return '<User %r>' % self.username
 
-class Group(db.Model):
-    idgroup = db.Column(db.Integer, primary_key=True)
-    page_idpage = db.Column(db.Integer(), unique=True, nullable=False)
-    type = db.Column(db.Integer,unique=False, nullable=True)
-    groupName = db.Column(db.String(45), unique=True, nullable=True)
-    groupLogo = db.Column(db.String(45), unique=True, nullable=True)
-    groupEmail = db.Column(db.String(45), unique=True, nullable=True)
-    groupcol = db.Column(db.String(45), unique=True, nullable=True)
+#class Group(db.Model):
+#    idgroup = db.Column(db.Integer, primary_key=True)
+#    page_idpage = db.Column(db.Integer(), unique=True, nullable=False)
+#    type = db.Column(db.Integer,unique=False, nullable=True)
+#    groupName = db.Column(db.String(45), unique=True, nullable=True)
+#    groupLogo = db.Column(db.String(45), unique=True, nullable=True)
+#    groupEmail = db.Column(db.String(45), unique=True, nullable=True)
+#    groupcol = db.Column(db.String(45), unique=True, nullable=True)
 
-class Group_has_fighter(db.Model):
-    group_idgroup = db.Column(db.Integer(), primary_key=True, nullable=False)
-    group_page_idpage = db.Column(db.Integer(), unique=True, nullable=False)
-    fighter_idfighter = db.Column(db.Integer(), unique=True, nullable=False)
-    fighter_page_idpage = db.Column(db.Integer(), unique=True, nullable=False)
-    relationtype = db.Column(db.Integer(), unique=False, nullable=True)
-    group_has_fighter_entrance = db.Column(db.Date(), primary_key=True, nullable=True)
-    group_has_fightercol_exit = db.Column(db.Date(), unique=False, nullable=True)
+#class Group_has_fighter(db.Model):
+#    group_idgroup = db.Column(db.Integer(), primary_key=True, nullable=False)
+#    group_page_idpage = db.Column(db.Integer(), unique=True, nullable=False)
+#    fighter_idfighter = db.Column(db.Integer(), unique=True, nullable=False)
+#    fighter_page_idpage = db.Column(db.Integer(), unique=True, nullable=False)
+#    relationtype = db.Column(db.Integer(), unique=False, nullable=True)
+#    group_has_fighter_entrance = db.Column(db.Date(), primary_key=True, nullable=True)
+#    group_has_fightercol_exit = db.Column(db.Date(), unique=False, nullable=True)
 
-class Event(db.Model):
-    idevent = db.Column(db.Integer(), primary_key=True, nullable=False)
-    page_idpage = db.Column(db.Integer(), unique=True, nullable=False)
-    organizationName = db.Column(db.String(45), unique=False, nullable=True)
-    organizationLogo = db.Column(db.String(45), unique=False, nullable=True)
-    tournamentName = db.Column(db.String(45), unique=False, nullable=True)
-    eventPage = db.Column(db.String(45), unique=False, nullable=True)
-    eventLocation = db.Column(db.String(45), unique=False, nullable=True)
+#class Event(db.Model):
+#    idevent = db.Column(db.Integer(), primary_key=True, nullable=False)
+#    page_idpage = db.Column(db.Integer(), unique=True, nullable=False)
+#    organizationName = db.Column(db.String(45), unique=False, nullable=True)
+#    organizationLogo = db.Column(db.String(45), unique=False, nullable=True)
+#    tournamentName = db.Column(db.String(45), unique=False, nullable=True)
+#    eventPage = db.Column(db.String(45), unique=False, nullable=True)
+#    eventLocation = db.Column(db.String(45), unique=False, nullable=True)
 
-class Stage(db.Model):
-    idStage = db.Column(db.Integer(), primary_key=True, nullable=False)
-    event_idevent = db.Column(db.Integer(), unique=False, nullable=False)
-    event_page_idpage = db.Column(db.Integer(), unique=False, nullable=False)
-    stageName = db.Column(db.String(45), unique=False, nullable=True)
+#class Stage(db.Model):
+#    idStage = db.Column(db.Integer(), primary_key=True, nullable=False)
+#    event_idevent = db.Column(db.Integer(), unique=False, nullable=False)
+#    event_page_idpage = db.Column(db.Integer(), unique=False, nullable=False)
+#    stageName = db.Column(db.String(45), unique=False, nullable=True)
 
-class Fight(db.Model):
-    idfight  = db.Column(db.Integer(), primary_key=True, nullable=False)
-    stage_idstage  = db.Column(db.Integer(), unique=True, nullable=False)
-    fightdate = db.Column(db.Date(), unique=False, nullable=True)
-    judge_idjudge = db.Column(db.Integer(), unique=False, nullable=True)
+#class Fight(db.Model):
+#    idfight  = db.Column(db.Integer(), primary_key=True, nullable=False)
+#    stage_idstage  = db.Column(db.Integer(), unique=True, nullable=False)
+#    fightdate = db.Column(db.Date(), unique=False, nullable=True)
+#    judge_idjudge = db.Column(db.Integer(), unique=False, nullable=True)
 
-class Fight_has_group(db.Model):
-    fight_idfight = db.Column(db.Integer(), primary_key=True, nullable=False)
-    fight_stage_idStage = db.Column(db.Integer(), primary_key=True, nullable=False)
-    fight_stage_Event_page_idpage = db.Column(db.Integer(), unique=False, nullable=True)
-    fight_stage_Event_id = db.Column(db.Integer(), unique=False, nullable=True)
-    group_idgroup = db.Column(db.Integer(), primary_key=True, nullable=False)
-    group_page_idpage = db.Column(db.Integer(), primary_key=True, nullable=False)
-    fight_has_group_result = db.Column(db.Integer(), unique=False, nullable=True)
-    idfight_has_group  = db.Column(db.Integer(), primary_key=True, nullable=False)
+#class Fight_has_group(db.Model):
+#    fight_idfight = db.Column(db.Integer(), primary_key=True, nullable=False)
+#    fight_stage_idStage = db.Column(db.Integer(), primary_key=True, nullable=False)
+#    fight_stage_Event_page_idpage = db.Column(db.Integer(), unique=False, nullable=True)
+#    fight_stage_Event_id = db.Column(db.Integer(), unique=False, nullable=True)
+#    group_idgroup = db.Column(db.Integer(), primary_key=True, nullable=False)
+#    group_page_idpage = db.Column(db.Integer(), primary_key=True, nullable=False)
+#    fight_has_group_result = db.Column(db.Integer(), unique=False, nullable=True)
+#    idfight_has_group  = db.Column(db.Integer(), primary_key=True, nullable=False)
 
 
-class Other(db.Model):
-    idother = db.Column(db.Integer(), primary_key=True, nullable=False)
-    page_idpage = db.Column(db.Integer(), unique=True, nullable=False)
-    icon = db.Column(db.String(45), unique=False, nullable=True)
-    content = db.Column(db.String(45), unique=False, nullable=True)
+#class Other(db.Model):
+#    idother = db.Column(db.Integer(), primary_key=True, nullable=False)
+#    page_idpage = db.Column(db.Integer(), unique=True, nullable=False)
+#    icon = db.Column(db.String(45), unique=False, nullable=True)
+#    content = db.Column(db.String(45), unique=False, nullable=True)
 
 
 class MyForm(FlaskForm):
@@ -176,32 +236,32 @@ class MyForm(FlaskForm):
     Submit: SubmitField = SubmitField('Submit')
 
 
-class Addpage(FlaskForm):
-    pagename = StringField('pagename', validators=[DataRequired()])
-    Submit: SubmitField = SubmitField('Submit')
+#class Addpage(FlaskForm):
+#    pagename = StringField('pagename', validators=[DataRequired()])
+#    Submit: SubmitField = SubmitField('Submit')
 
-class Selectuser(FlaskForm):
-    username = StringField('username',validators=[DataRequired()])
-    Submit: SubmitField = SubmitField('Submit')
+#class Selectuser(FlaskForm):
+#    username = StringField('username',validators=[DataRequired()])
+#    Submit: SubmitField = SubmitField('Submit')
 
-pageTypeDict = {
-        None: None,
-        0: Fighter.query.filter_by,
-        1: Event.query.filter_by,
-        2: Other.query.filter_by,
-        3: Group.query.filter_by,
-        4: Group.query.filter_by,
-    }
+#pageTypeDict = {
+#        None: None,
+#        0: Fighter.query.filter_by,
+#        1: Event.query.filter_by,
+#        2: Other.query.filter_by,
+#        3: Group.query.filter_by,
+#        4: Group.query.filter_by,
+#    }
 
-class editorform(FlaskForm):
-    name = StringField()
-    age = DateField()
-    email = StringField()
-    weight =  StringField()
-    height = StringField()
-    mainhand = StringField()
-    nacionality = StringField()
-    sex = StringField()
+#class editorform(FlaskForm):
+#    name = StringField()
+#    age = DateField()
+#    email = StringField()
+#    weight =  StringField()
+#    height = StringField()
+#    mainhand = StringField()
+#    nacionality = StringField()
+#    sex = StringField()
 
 #def frontend_top():
 #    tempNav = Navbar(title="Medieval Fights")
@@ -289,7 +349,7 @@ def terms():
     return render_template("beko/terms.html")
 
 
-@app.route("/page/<string:PageAddresi>", methods=["GET", "POST"])
+"""@app.route("/page/<string:PageAddresi>", methods=["GET", "POST"])
 def route_page(PageAddresi):
     thispagehastype = False
 
@@ -934,6 +994,7 @@ def route_page(PageAddresi):
         else:
             return "This page doesn't exist."
 
+"""
 
 @app.route("/testelog")
 @login_required
@@ -1008,7 +1069,7 @@ def logout():
     logout_user()
     return 'You are now logged out.'
 
-@app.route('/userselection', methods=['GET', 'POST'])
+"""@app.route('/userselection', methods=['GET', 'POST'])
 @login_required
 def userselection():
     table = {'headers': ['Select', 'Editor', 'Page'],
@@ -1373,5 +1434,6 @@ def iniciarbanco():
     db.session.commit()
 
 #iniciarbanco()
+"""
 
 app.run(debug=True, host='0.0.0.0')
