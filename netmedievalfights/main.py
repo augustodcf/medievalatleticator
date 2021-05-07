@@ -108,7 +108,7 @@ class Produto(db.Model):
     esconder = db.Column(db.SmallInteger,  unique=False, nullable=True)
 
 class Cor(db.Model):
-    tamanho_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    cor_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), unique=True, nullable=False)
     produto_produto_id = db.Column(db.Integer, unique=False, nullable=False)
 
