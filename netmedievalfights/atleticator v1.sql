@@ -20,7 +20,7 @@ USE `atleticator` ;
 -- -----------------------------------------------------
 -- Table `atleticator`.`user`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `atleticator`.`user` (
+CREATE TABLE IF NOT EXISTS `atleticator`.`users` (
   `username` VARCHAR(16) NOT NULL,
   `email` VARCHAR(255) NULL,
   `password` VARCHAR(32) NOT NULL,

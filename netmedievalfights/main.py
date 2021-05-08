@@ -53,7 +53,7 @@ login_manager.init_app(app)
 #    def get_id(self):
 #        return self.idUser
 
-class User(db.Model):
+class Users(db.Model):
     username = db.Column(db.String(16), unique=True, nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(32), unique=False, nullable=False)
@@ -77,7 +77,7 @@ class User(db.Model):
 
 @login_manager.user_loader
 def load_user(user_id):
-    user = User.query.filter_by(idUser=user_id).first()
+    user = Users.query.filter_by(idUser=user_id).first()
     print(user)
     return user
 
@@ -339,9 +339,13 @@ def index():
 
 @app.route("/home", methods=["GET", "POST"])
 def home():
-    user = User.query.filter_by(idUser=str(current_user).strip('<>').replace('User ', '')).first()
+    user = Users.query.filter_by(idUser=str(current_user).strip('<>').replace('Users ', '')).first()
 
-    return render_template("beko/home.html", username=user.username)
+
+
+
+
+    return render_template("beko/home.html", username=user.username , userpower=user.power)
 
 
 @app.route("/terms")
@@ -1011,9 +1015,9 @@ def register():
     if form.validate_on_submit():
         if form.psw.data != form.repassword.data:
             error.append("The passwords do not match")
-        if User.query.filter_by(username=form.username.data).first() is not None:
+        if Users.query.filter_by(username=form.username.data).first() is not None:
             error.append("The user already exists")
-        if User.query.filter_by(email=form.email.data).first() is not None:
+        if Users.query.filter_by(email=form.email.data).first() is not None:
             error.append("The email already exists")
         if form.email.data.find('@') == -1:
             error.append("The email is invalid")
@@ -1022,7 +1026,7 @@ def register():
             flash(', '.join(error))
             return redirect(url_for('register'))
         else:
-            user = User(username=form.username.data, password=form.psw.data, email=form.email.data)
+            user = Users(username=form.username.data, password=form.psw.data, email=form.email.data)
             db.session.add(user)
             db.session.commit()
             return redirect(url_for('login'))
@@ -1039,7 +1043,7 @@ def login():
     # if form.validate_on_submit():
     if request.method == "POST":
 
-        user = User.query.filter_by(username=request.form['username']).first()
+        user = Users.query.filter_by(username=request.form['username']).first()
         if user is not None and request.form['password'] == user.password:
             # Login and validate the user.
             # user should be an instance of your `User` class
