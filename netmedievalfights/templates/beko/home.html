@@ -287,10 +287,10 @@ ul ul a {
             </div>
 
             <ul class="list-unstyled components">
-            		<img>
-                <p>{{username}}</p>
+            		<img src="static/img/icons/person.png" style="margin-left: 35px; width: 100px">
+                <p style="margin-left: 35px;">{{username}}</p>
                 <li class="active">
-                    {% if userpower == 1 %}
+                    {% if userpower == '1' %}
                     <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Adm</a>
                     <ul class="collapse list-unstyled" id="homeSubmenu">
                         <li>

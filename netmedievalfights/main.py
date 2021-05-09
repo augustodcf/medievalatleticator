@@ -1010,6 +1010,7 @@ def testelog():
 def register():
     form = MyForm()
     error = []
+    power = 0
 
     # print (form.validate_on_submit())
     if form.validate_on_submit():
@@ -1021,12 +1022,14 @@ def register():
             error.append("The email already exists")
         if form.email.data.find('@') == -1:
             error.append("The email is invalid")
+        if Users.query.filter_by().first() == None:
+            power = "1"
 
         if error:
             flash(', '.join(error))
             return redirect(url_for('register'))
         else:
-            user = Users(username=form.username.data, password=form.psw.data, email=form.email.data)
+            user = Users(username=form.username.data, password=form.psw.data, email=form.email.data, power=power)
             db.session.add(user)
             db.session.commit()
             return redirect(url_for('login'))
