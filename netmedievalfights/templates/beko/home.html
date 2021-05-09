@@ -261,7 +261,55 @@ ul ul a {
 }
 
 </style>
+<!-- modal -->
 
+<div class="modal fade" id="imageeditor" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLongTitle">Image Editor</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+
+						<div class="modal-body">
+							<script type="text/javascript">
+
+								function sendimage(){
+									document.getElementById('imageform').submit();
+									window.location.href = "/home";
+								};
+
+							</script>
+							<form id="imageform" method="POST" action="/home" enctype=multipart/form-data>
+								<input name="gif" type="file" id="fileupload" accept="image/*">
+
+								<script>
+									function uploadphoto(){
+										document.getElementById('fileupload').name = "gif"
+									};
+									
+
+
+
+
+								</script>
+
+								<br><br>
+
+								<button value='submit' onclick='sendimage()' style='margin-left: 10px;'class="btn btn-primary">Submit</button>
+							</form>
+
+							<div class="modal-footer">
+								
+								<button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
  <!-- jQuery CDN - Slim version (=without AJAX) -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <!-- Popper.JS -->
@@ -287,8 +335,12 @@ ul ul a {
             </div>
 
             <ul class="list-unstyled components">
-            		<img src="static/img/icons/person.png" style="margin-left: 35px; width: 100px">
-                <p style="margin-left: 35px;">{{username}}</p>
+            		<img src="static/page/{{userphoto}}" style="margin-left: 35px; width: 100px"><br>
+            	
+            		<button id="photo" data-toggle="modal" data-target="#imageeditor" onclick="uploadphoto()" style="margin-left: 100px;" class="btn btn-secondary btn-sm">Edit</button>
+                
+                <p style="margin-left: 35px;">{{username}}</p><br>
+
                 <li class="active">
                     {% if userpower == '1' %}
                     <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Adm</a>

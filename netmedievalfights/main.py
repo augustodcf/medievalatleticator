@@ -62,6 +62,7 @@ class Users(db.Model):
     delete = db.Column(db.Integer,  unique=False, nullable=True)
     power = db.Column(db.String(45), unique=False, nullable=True)
     dataNasc = db.Column(db.DateTime, unique=False, nullable=True)
+    profilephoto = db.Column(db.String(255), unique=False, nullable=True)
 
     def is_authenticated(self):
         return self.authenticated
@@ -340,12 +341,21 @@ def index():
 @app.route("/home", methods=["GET", "POST"])
 def home():
     user = Users.query.filter_by(idUser=str(current_user).strip('<>').replace('Users ', '')).first()
+    if user.profilephoto == None:
+        userphoto = "person.png"
+    else:
+        userphoto = user.profilephoto
+
+    if request.method == "POST":
+        file = request.files['gif']
+        file.filename = user.username + file.filename[-4::]
+        file.save(os.path.join(app.config["UPLOAD_FOLDER"], file.filename))
+        user.profilephoto = file.filename
+        db.session.add(user)
+        db.session.commit()
 
 
-
-
-
-    return render_template("beko/home.html", username=user.username , userpower=user.power)
+    return render_template("beko/home.html", username=user.username , userpower=user.power, userphoto=userphoto)
 
 
 @app.route("/terms")

@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS `atleticator`.`users` (
   `delete` TINYINT(1) NULL,
   `power` VARCHAR(45) NULL,
   `dataNasc` DATE NULL,
+  `profilephoto` varchar(255) NULL,
   PRIMARY KEY (`idUser`));
 
 
