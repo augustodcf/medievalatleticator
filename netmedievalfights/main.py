@@ -53,7 +53,7 @@ login_manager.init_app(app)
 #    def get_id(self):
 #        return self.idUser
 
-class User(db.Model):
+class Users(db.Model):
     username = db.Column(db.String(16), unique=True, nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(32), unique=False, nullable=False)
@@ -62,6 +62,7 @@ class User(db.Model):
     delete = db.Column(db.Integer,  unique=False, nullable=True)
     power = db.Column(db.String(45), unique=False, nullable=True)
     dataNasc = db.Column(db.DateTime, unique=False, nullable=True)
+    profilephoto = db.Column(db.String(255), unique=False, nullable=True)
 
     def is_authenticated(self):
         return self.authenticated
@@ -77,7 +78,7 @@ class User(db.Model):
 
 @login_manager.user_loader
 def load_user(user_id):
-    user = User.query.filter_by(idUser=user_id).first()
+    user = Users.query.filter_by(idUser=user_id).first()
     print(user)
     return user
 
@@ -108,7 +109,7 @@ class Produto(db.Model):
     esconder = db.Column(db.SmallInteger,  unique=False, nullable=True)
 
 class Cor(db.Model):
-    tamanho_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    cor_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), unique=True, nullable=False)
     produto_produto_id = db.Column(db.Integer, unique=False, nullable=False)
 
@@ -339,9 +340,22 @@ def index():
 
 @app.route("/home", methods=["GET", "POST"])
 def home():
-    user = User.query.filter_by(idUser=str(current_user).strip('<>').replace('User ', '')).first()
+    user = Users.query.filter_by(idUser=str(current_user).strip('<>').replace('Users ', '')).first()
+    if user.profilephoto == None:
+        userphoto = "person.png"
+    else:
+        userphoto = user.profilephoto
 
-    return render_template("beko/home.html", username=user.username)
+    if request.method == "POST":
+        file = request.files['gif']
+        file.filename = user.username + file.filename[-4::]
+        file.save(os.path.join(app.config["UPLOAD_FOLDER"], file.filename))
+        user.profilephoto = file.filename
+        db.session.add(user)
+        db.session.commit()
+
+
+    return render_template("beko/home.html", username=user.username , userpower=user.power, userphoto=userphoto)
 
 
 @app.route("/terms")
@@ -1006,23 +1020,26 @@ def testelog():
 def register():
     form = MyForm()
     error = []
+    power = 0
 
     # print (form.validate_on_submit())
     if form.validate_on_submit():
         if form.psw.data != form.repassword.data:
             error.append("The passwords do not match")
-        if User.query.filter_by(username=form.username.data).first() is not None:
+        if Users.query.filter_by(username=form.username.data).first() is not None:
             error.append("The user already exists")
-        if User.query.filter_by(email=form.email.data).first() is not None:
+        if Users.query.filter_by(email=form.email.data).first() is not None:
             error.append("The email already exists")
         if form.email.data.find('@') == -1:
             error.append("The email is invalid")
+        if Users.query.filter_by().first() == None:
+            power = "1"
 
         if error:
             flash(', '.join(error))
             return redirect(url_for('register'))
         else:
-            user = User(username=form.username.data, password=form.psw.data, email=form.email.data)
+            user = Users(username=form.username.data, password=form.psw.data, email=form.email.data, power=power)
             db.session.add(user)
             db.session.commit()
             return redirect(url_for('login'))
@@ -1039,7 +1056,7 @@ def login():
     # if form.validate_on_submit():
     if request.method == "POST":
 
-        user = User.query.filter_by(username=request.form['username']).first()
+        user = Users.query.filter_by(username=request.form['username']).first()
         if user is not None and request.form['password'] == user.password:
             # Login and validate the user.
             # user should be an instance of your `User` class
