@@ -1,0 +1,90 @@
+#cabecalho{
+	background:#43054e;	
+	height: 80px;
+}
+#home{
+	background:#551A8B;
+	color: white;
+}
+
+.caixa{
+	background: #e4e4e4;
+	padding: 60px 0;
+	
+}
+.caixa1{
+	background: #f9f9f9;
+	padding: 60px 0;
+	
+}
+.btn, .btn-group {
+	background:#43054e;
+	border: 3px; 
+	color: #e4e4e4;
+	
+}
+.busca{
+	background: url(search.png) no-repeat center right;
+	padding: 5px;
+	border: none;
+	width: 60px;
+	color: #ddd;
+	
+}
+.busca:focus-visible{
+	transition: all 0.5s linear;
+	width: 200px;
+	border-bottom: solid 1px #ddd;
+	outline: none;
+}
+
+.login{
+	text-decoration-line: none;
+	color: #ddd;
+	margin-top: 10%;
+	margin-bottom: 12%;
+	background-color: #43054e;
+	border-color: #43054e;
+	border-style: solid;
+	border-radius: 15px;
+	width: 600px; 
+	height: 400px;
+}
+.box-login{
+	padding: 40px;
+	text-decoration-line: none;
+	
+}
+.box-button{
+	display: inline-block;
+	padding: 1px;	
+}
+#teste2{
+	margin-left: 36%;
+}
+
+#teste3{
+	padding-top: 17%;
+}
+
+/*.login {
+	width: 600px; 
+	position: relative;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	
+	align-items: cente
+	border-style: solid;
+	border-radius: 8px;
+	padding: 48px 40px 36px;
+}*/
+#footer, .footer {
+	background-color: #43054e;
+	color: #ddd;	
+	text-decoration-line: none;
+    bottom:0;
+    width:100%;
+	height: 70px;
+
+}
