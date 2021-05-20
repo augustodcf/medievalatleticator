@@ -88,6 +88,7 @@ class News(db.Model):
     htmlinterno = db.Column(db.String(45), unique=True, nullable=False)
     titulo = db.Column(db.String(45), unique=False, nullable=False)
     delete = db.Column(db.SmallInteger,  unique=False, nullable=True)
+    dt_public = db.Column(db.TIMESTAMP(6), unique=False, nullable=True)
 
 class User_has_news(db.Model):
     user_idUser = db.Column(db.Integer, primary_key=True, nullable=False)
@@ -111,12 +112,19 @@ class Produto(db.Model):
 class Cor(db.Model):
     cor_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), unique=True, nullable=False)
-    produto_produto_id = db.Column(db.Integer, unique=False, nullable=False)
+
+class Produto_has_Cor(db.Model):
+    cor_cor_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    produto_produto_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
 class Tamanho(db.Model):
     tamanho_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), unique=True, nullable=False)
-    produto_produto_id = db.Column(db.Integer, unique=False, nullable=False)
+
+class Produto_has_Tamanho(db.Model):
+    tamanho_tamanho_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    produto_produto_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
 
 #class User_has_page(db.Model):
 #    user_id = db.Column(db.Integer, db.ForeignKey('user.idUser'), primary_key=True)
@@ -338,6 +346,46 @@ class MyForm(FlaskForm):
 def index():
     return render_template("beko/index.html")
 
+@app.route("/loja", methods=["GET", "POST"])
+def loja():
+    user = Users.query.filter_by(idUser=str(current_user).strip('<>').replace('Users ', '')).first()
+    relacaodeprodutosvisiveis = {'headers': ['id', 'nome', 'descricao', 'preco', 'tamanhos', 'cores'],
+                             'contents': []
+                              }
+
+
+
+    if user.profilephoto == None:
+        userphoto = "person.png"
+    else:
+        userphoto = user.profilephoto
+
+    produtosdisponiveis = Produto.query.filter_by(esconder=None)
+    relacaodecoresdoproduto = ""
+    relacaodetamanhosdoproduto = ""
+    for produtovisivel in produtosdisponiveis:
+        coresdoproduto =  Produto_has_Cor.query.filter_by(produto_produto_id=produtovisivel.produto_id)
+        for cordoproduto in coresdoproduto:
+            nomedacor = Cor.query.filter_by(cor_id=cordoproduto).first()+" - "
+            relacaodecoresdoproduto = relacaodecoresdoproduto + nomedacor
+
+        tamanhosdoproduto = Produto_has_Tamanho.query.filter_by(produto_produto_id=produtovisivel.produto_id)
+        for tamanhodoproduto in tamanhosdoproduto:
+            nomedotamanho = Cor.query.filter_by(cor_id=tamanhodoproduto).first() + " - "
+            relacaodetamanhosdoproduto = relacaodecoresdoproduto + nomedotamanho
+
+        dic = {
+            'id': produtovisivel.produto_id,
+            'nome': produtovisivel.nome,
+            'descricao': produtovisivel.descricao,
+            'preco': produtovisivel.preco,
+            'tamanhos': relacaodetamanhosdoproduto,
+            'cores': relacaodecoresdoproduto,
+        }
+        relacaodeprodutosvisiveis['contents'].append(dic)
+
+    return render_template("beko/loja.html", username=user.username , userpower=user.power, userphoto=userphoto, produtos=relacaodeprodutosvisiveis)
+
 @app.route("/home", methods=["GET", "POST"])
 def home():
     user = Users.query.filter_by(idUser=str(current_user).strip('<>').replace('Users ', '')).first()
@@ -345,6 +393,7 @@ def home():
         userphoto = "person.png"
     else:
         userphoto = user.profilephoto
+
 
     if request.method == "POST":
         file = request.files['gif']
