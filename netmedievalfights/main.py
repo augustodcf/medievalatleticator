@@ -352,7 +352,20 @@ def loja():
     relacaodeprodutosvisiveis = {'headers': ['id', 'nome', 'descricao', 'preco', 'tamanhos', 'cores'],
                              'contents': []
                               }
+    relacaodetamanhos = {'headers': ['tamanho'],
+                             'contents': []
+                              }
+    relacaodecores = {'headers': ['cor'],
+                             'contents': []
+                              }
 
+    for cadatamanho in Tamanho.query.filter_by():
+        dic= {'tamanho':cadatamanho.name}
+        relacaodetamanhos['contents'].append(dic)
+
+    for cadacor in Cor.query.filter_by():
+        dic = {'cor': cadacor.name}
+        relacaodecores['contents'].append(dic)
 
 
     if user.profilephoto == None:
@@ -361,9 +374,10 @@ def loja():
         userphoto = user.profilephoto
 
     produtosdisponiveis = Produto.query.filter_by(esconder=None)
-    relacaodecoresdoproduto = ""
-    relacaodetamanhosdoproduto = ""
+
     for produtovisivel in produtosdisponiveis:
+        relacaodecoresdoproduto = ""
+        relacaodetamanhosdoproduto = ""
         coresdoproduto =  Produto_has_Cor.query.filter_by(produto_produto_id=produtovisivel.produto_id)
         for cordoproduto in coresdoproduto:
             nomedacor = Cor.query.filter_by(cor_id=cordoproduto).first()+" - "
@@ -374,17 +388,42 @@ def loja():
             nomedotamanho = Cor.query.filter_by(cor_id=tamanhodoproduto).first() + " - "
             relacaodetamanhosdoproduto = relacaodecoresdoproduto + nomedotamanho
 
-        dic = {
-            'id': produtovisivel.produto_id,
-            'nome': produtovisivel.nome,
-            'descricao': produtovisivel.descricao,
-            'preco': produtovisivel.preco,
-            'tamanhos': relacaodetamanhosdoproduto,
-            'cores': relacaodecoresdoproduto,
-        }
-        relacaodeprodutosvisiveis['contents'].append(dic)
+            dic = {
+                'id': produtovisivel.produto_id,
+                'nome': produtovisivel.nome,
+                'descricao': produtovisivel.descricao,
+                'preco': produtovisivel.preco,
+                'tamanhos': relacaodetamanhosdoproduto,
+                'cores': relacaodecoresdoproduto,
+            }
+            relacaodeprodutosvisiveis['contents'].append(dic)
 
-    return render_template("beko/loja.html", username=user.username , userpower=user.power, userphoto=userphoto, produtos=relacaodeprodutosvisiveis)
+    if request.method == "POST":
+        novoproduto = Produto()
+        novoproduto.nome = request.form["name"]
+        novoproduto.descricao = request.form["descricao"]
+        novoproduto.preco = request.form["preco"]
+
+
+
+
+    return render_template("beko/loja.html", username=user.username , userpower=user.power, userphoto=userphoto,
+                           produtos=relacaodeprodutosvisiveis,
+                           tamanhos=relacaodetamanhos,
+                           cores=relacaodecores,)
+
+@app.route("/lojacor", methods=["GET", "POST"])
+def lojacor():
+    if request.method == "POST":
+        novacor = Cor()
+        novacor.name = request.form["name"]
+        db.session.add(novacor)
+        db.session.commit()
+        flash("Cor adicionada comn sucesso.")
+
+    return redirect('/loja')
+
+
 
 @app.route("/home", methods=["GET", "POST"])
 def home():

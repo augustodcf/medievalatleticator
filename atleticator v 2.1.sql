@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS `atleticator`.`produto` (
 -- Table `atleticator`.`tamanho`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `atleticator`.`tamanho` (
-  `tamanho_id` INT NOT NULL,
+  `tamanho_id` INT NOT NULL  AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`tamanho_id`));
 
@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `atleticator`.`tamanho` (
 -- Table `atleticator`.`cor`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `atleticator`.`cor` (
-  `cor_id` INT NOT NULL,
+  `cor_id` INT NOT NULL  AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`cor_id`));
 
