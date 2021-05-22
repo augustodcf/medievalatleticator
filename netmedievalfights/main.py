@@ -437,7 +437,7 @@ def loja():
                         relacaodacorcomoproduto.produto_produto_id = novoprodutonobanco.produto_id
                         db.session.add(relacaodacorcomoproduto)
                         db.session.commit()
-                        flash("Cor " + itemdoformulario.split('-')[0] + " adicionado com sucesso ao produto.")
+                        flash("Cor " + itemdoformulario.split('-')[0] + " adicionado com sucesso ao "+novoprodutonobanco)
                     if "tamanho" == (itemdoformulario.split('-')[0]):
                         relacaodatamanhocomoproduto = Produto_has_Tamanho()
                         tamanhoaserinseridadoproduto = Tamanho.query.filter_by(name=(itemdoformulario.split('-')[1])).first()
@@ -446,7 +446,7 @@ def loja():
                         relacaodatamanhocomoproduto.produto_produto_id = novoprodutonobanco.produto_id
                         db.session.add(relacaodatamanhocomoproduto)
                         db.session.commit()
-                        flash("Tamanho "+itemdoformulario.split('-')[0]+" adicionado com sucesso ao produto.")
+                        flash("Tamanho "+itemdoformulario.split('-')[0]+" adicionado com sucesso ao "+novoprodutonobanco)
         flash("Produto adicionado com sucesso.")
 
 
