@@ -201,19 +201,20 @@ p
                                   };
 
               </script>
-              <form id="editorform1" method="POST" action="/loja" onsubmit="return false;">
+              <form id="editorform1" method="POST" action="/loja" >
 
 
-                Nome: <input type='text' name='name' value="{{name}}" class="form-control" >     <br>
+                Nome: <input type='text' name='name' value="" class="form-control" >     <br>
                 
-                Descrição: <input type='text' name='email' value="{{email}}" class="form-control" >              
-                Preço: <input type='text' name='email' value="{{email}}" class="form-control" >
+                Descrição: <input type='text' name='descricao' value="" class="form-control" > <br>
+
+                Preço: <input type='text' name='preco' value="" class="form-control" >
 
                 <br><br>
 
                 Tamanhos:       
                 {% for cadatamanho in tamanhos.contents %}
-                    {{cadatamanho["tamanho"]}}
+                    <li class="list-group-item">{{cadatamanho["tamanho"]}} <input type="checkbox" id="scales" name="tamanho-{{cadatamanho['tamanho']}}" value="tamanho-{{cadatamanho['tamanho']}}"></li>
                 {% endfor %}
 
                 <br><br>
@@ -221,14 +222,16 @@ p
                 Cores: 
                 <ul class="list-group">
                 {% for cadacor in cores.contents %}
-                    <li class="list-group-item">{{cadacor["cor"]}} <input type="checkbox" id="scales" name="{{cadacor['cor']}}"></li>
+                    <li class="list-group-item">{{cadacor["cor"]}} <input type="checkbox" id="scales" name="cor-{{cadacor['cor']}}" value="cor-{{cadacor['cor']}}"></li>
                 {% endfor %}
 
+                <br><br>
+                <button value='submit'  style='width: 100%' class="btn btn-primary">Submit</button>
 
               </form>
             </div>
             <div class="modal-footer">
-              <button value='submit' onclick='sendEditor1()' style='margin-left: 10px;'class="btn btn-primary">Submit</button>
+              
               <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
             </div>
           </div>
@@ -282,6 +285,52 @@ p
         </div>
       </div>
 
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addtamanho">Gerenciar Tamanhos</button>
+
+<div class="modal fade" id="addtamanho" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Gerenciar Tamanhos</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
+            <div class="modal-body">
+                <script>
+                function sendEditor3(){
+                  document.getElementById('editorform3').submit();
+                  window.location.href = "/lojatamanho"
+                                  };
+
+              </script>
+              <form id="editorform3" method="POST" action="/lojatamanho" >
+
+
+                Nome: <input type='text' name='name' value="" class="form-control" >     <br>
+                
+
+                <br>
+
+                Cores já adicionadas no sistema: 
+                <ul class="list-group">
+                {% for cadatamanho in tamanhos.contents %}
+                    <li class="list-group-item">{{cadatamanho["tamanho"]}}</li>
+                {% endfor %}
+
+                <br><br>
+                <button value='submit' class="btn btn-primary">Submit</button>
+              </form>
+            </div>
+            <div class="modal-footer">
+              
+              <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
 {% endif %}
 
