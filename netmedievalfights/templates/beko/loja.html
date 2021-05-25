@@ -337,7 +337,10 @@ p
 <div class="container">
   <div class="row">
     {% for row in produtos.contents %}
-        <div class="{{row['id']}}">{{row["nome"]}}</div>
+        <div class="{{row['id']}}">{{row["nome"]}} <br>
+          {{row["tamanhos"]}} <br>
+          {{row["cores"]}}
+        </div>
     {% endfor %}
   </div>
 </div>

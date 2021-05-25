@@ -115,7 +115,7 @@ class Cor(db.Model):
     cor_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), unique=True, nullable=False)
 
-class Produto_has_Cor(db.Model):
+class Produto_has_cor(db.Model):
     produto_has_cor_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     cor_cor_id = db.Column(db.Integer,unique=False, nullable=False)
     produto_produto_id = db.Column(db.Integer, unique=False, nullable=False)
@@ -124,7 +124,7 @@ class Tamanho(db.Model):
     tamanho_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), unique=True, nullable=False)
 
-class Produto_has_Tamanho(db.Model):
+class Produto_has_tamanho(db.Model):
     produto_has_tamanho_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     tamanho_tamanho_id = db.Column(db.Integer, unique=False, nullable=False)
     produto_produto_id = db.Column(db.Integer, unique=False, nullable=False)
@@ -380,31 +380,31 @@ def loja():
     produtosdisponiveis = Produto.query.filter_by(esconder=None)
 
     for produtovisivel in produtosdisponiveis:
-    #    relacaodecoresdoproduto = {'headers': ['cor'],
-    #                         'contents': []
-    #                          }
-    #    relacaodetamanhosdoproduto = {'headers': ['tamanho'],
-    #                         'contents': []
-    #                          }
-    #    coresdoproduto =  Produto_has_Cor.query.filter_by(produto_produto_id=produtovisivel.produto_id)
-    #    for cordoproduto in coresdoproduto:
-    #        nomedacor = Cor.query.filter_by(cor_id=cordoproduto).first()
-    #        dic = {'cor': nomedacor.name}
-    #        relacaodecoresdoproduto['contents'].append(dic)
-#
-    #    tamanhosdoproduto = Produto_has_Tamanho.query.filter_by(produto_produto_id=produtovisivel.produto_id)
-    #    for tamanhodoproduto in tamanhosdoproduto:
-    #        nomedotamanho = Cor.query.filter_by(cor_id=tamanhodoproduto).first()
-    #        dic = {'cor': nomedotamanho.name}
-    #        relacaodetamanhosdoproduto['contents'].append(dic)
+        relacaodecoresdoproduto = {'headers': ['cor'],
+                             'contents': []
+                              }
+        relacaodetamanhosdoproduto = {'headers': ['tamanho'],
+                             'contents': []
+                              }
+        coresdoproduto =  Produto_has_cor.query.filter_by(produto_produto_id=produtovisivel.produto_id)
+        for cordoproduto in coresdoproduto:
+            nomedacor = Cor.query.filter_by(cor_id=cordoproduto.cor_cor_id).first()
+            dic = {'cor': nomedacor.name}
+            relacaodecoresdoproduto['contents'].append(dic)
+
+        tamanhosdoproduto = Produto_has_tamanho.query.filter_by(produto_produto_id=produtovisivel.produto_id)
+        for tamanhodoproduto in tamanhosdoproduto:
+            nomedotamanho = Tamanho.query.filter_by(tamanho_id=tamanhodoproduto.tamanho_tamanho_id).first()
+            dic = {'tamanho': nomedotamanho.name}
+            relacaodetamanhosdoproduto['contents'].append(dic)
 #
             dic = {
                 'id': produtovisivel.produto_id,
                 'nome': produtovisivel.name,
                 'descricao': produtovisivel.descricao,
                 'preco': produtovisivel.preco,
-    #            'tamanhos': relacaodetamanhosdoproduto,
-    #            'cores': relacaodecoresdoproduto,
+                'tamanhos': relacaodetamanhosdoproduto,
+                'cores': relacaodecoresdoproduto,
             }
             relacaodeprodutosvisiveis['contents'].append(dic)
 
@@ -430,23 +430,25 @@ def loja():
             for itemdoformulario in request.form:
                 if itemdoformulario.count('-') > 0:
                     if "cor" == (itemdoformulario.split('-')[0]):
-                        relacaodacorcomoproduto = Produto_has_Cor()
+                        relacaodacorcomoproduto = Produto_has_cor()
                         coraserinseridadoproduto = Cor.query.filter_by(name=(itemdoformulario.split('-')[1])).first()
                         novoprodutonobanco = Produto.query.filter_by(name=novoproduto.name).first()
                         relacaodacorcomoproduto.cor_cor_id = coraserinseridadoproduto.cor_id
                         relacaodacorcomoproduto.produto_produto_id = novoprodutonobanco.produto_id
+                        db.session.add(novoprodutonobanco)
                         db.session.add(relacaodacorcomoproduto)
                         db.session.commit()
-                        flash("Cor " + itemdoformulario.split('-')[0] + " adicionado com sucesso ao "+novoprodutonobanco)
+                        flash("Cor " + itemdoformulario.split('-')[0] + " adicionado com sucesso ao "+ novoprodutonobanco.name)
                     if "tamanho" == (itemdoformulario.split('-')[0]):
-                        relacaodatamanhocomoproduto = Produto_has_Tamanho()
+                        relacaodatamanhocomoproduto = Produto_has_tamanho()
                         tamanhoaserinseridadoproduto = Tamanho.query.filter_by(name=(itemdoformulario.split('-')[1])).first()
                         novoprodutonobanco = Produto.query.filter_by(name=novoproduto.name).first()
                         relacaodatamanhocomoproduto.tamanho_tamanho_id = tamanhoaserinseridadoproduto.tamanho_id
                         relacaodatamanhocomoproduto.produto_produto_id = novoprodutonobanco.produto_id
+                        db.session.add(novoprodutonobanco)
                         db.session.add(relacaodatamanhocomoproduto)
                         db.session.commit()
-                        flash("Tamanho "+itemdoformulario.split('-')[0]+" adicionado com sucesso ao "+novoprodutonobanco)
+                        flash("Tamanho "+itemdoformulario.split('-')[0]+" adicionado com sucesso ao "+ novoprodutonobanco.name)
         flash("Produto adicionado com sucesso.")
 
 
