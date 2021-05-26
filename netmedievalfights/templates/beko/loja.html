@@ -16,6 +16,7 @@
 
 
 
+
 <style>
  .jumbotron {
   margin-top: 1em;  // add a little space
@@ -347,20 +348,23 @@ p
         <div class="card-body">
         <h5 class="card-title">{{row["nome"]}}</h5> <br>
           <form method="POST" action="/lojacomprachat" >
+            
             Tamanhos
             <br>
+            
             {% for cadatamanho in row["tamanhos"].contents %} 
               <input type="checkbox" id="{{cadatamanho['tamanho']}}" name="{{cadatamanho['tamanho']}}">
-              <label for="scales">{{cadatamanho['tamanho']}}</label>
+              {{cadatamanho['tamanho']}}
               <br>
             {% endfor %}
+            
             <br>
             Cores
             <br>
             {% for cadacor in row["cores"].contents %} 
               <input type="checkbox" id="{{cadacor['cor']}}" name="{{cadacor['cor']}}"
               >
-              <label for="scales">{{cadacor['cor']}}</label>
+              {{cadacor['cor']}}
               <br>
             {% endfor %}
             <br>
