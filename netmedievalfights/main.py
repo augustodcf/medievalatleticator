@@ -398,15 +398,15 @@ def loja():
             dic = {'tamanho': nomedotamanho.name}
             relacaodetamanhosdoproduto['contents'].append(dic)
 #
-            dic = {
-                'id': produtovisivel.produto_id,
-                'nome': produtovisivel.name,
-                'descricao': produtovisivel.descricao,
-                'preco': produtovisivel.preco,
-                'tamanhos': relacaodetamanhosdoproduto,
-                'cores': relacaodecoresdoproduto,
-            }
-            relacaodeprodutosvisiveis['contents'].append(dic)
+        dic = {
+            'id': produtovisivel.produto_id,
+            'nome': produtovisivel.name,
+            'descricao': produtovisivel.descricao,
+            'preco': produtovisivel.preco,
+            'tamanhos': relacaodetamanhosdoproduto,
+            'cores': relacaodecoresdoproduto,
+        }
+        relacaodeprodutosvisiveis['contents'].append(dic)
 
     if request.method == "POST":
         erro = 0
@@ -435,7 +435,6 @@ def loja():
                         novoprodutonobanco = Produto.query.filter_by(name=novoproduto.name).first()
                         relacaodacorcomoproduto.cor_cor_id = coraserinseridadoproduto.cor_id
                         relacaodacorcomoproduto.produto_produto_id = novoprodutonobanco.produto_id
-                        db.session.add(novoprodutonobanco)
                         db.session.add(relacaodacorcomoproduto)
                         db.session.commit()
                         flash("Cor " + itemdoformulario.split('-')[0] + " adicionado com sucesso ao "+ novoprodutonobanco.name)
@@ -445,7 +444,6 @@ def loja():
                         novoprodutonobanco = Produto.query.filter_by(name=novoproduto.name).first()
                         relacaodatamanhocomoproduto.tamanho_tamanho_id = tamanhoaserinseridadoproduto.tamanho_id
                         relacaodatamanhocomoproduto.produto_produto_id = novoprodutonobanco.produto_id
-                        db.session.add(novoprodutonobanco)
                         db.session.add(relacaodatamanhocomoproduto)
                         db.session.commit()
                         flash("Tamanho "+itemdoformulario.split('-')[0]+" adicionado com sucesso ao "+ novoprodutonobanco.name)
@@ -492,7 +490,7 @@ def home():
 
     if request.method == "POST":
         file = request.files['gif']
-        file.filename = user.username + file.filename[-4::]
+        file.filename = "user" + user.username + file.filename[-4::]
         file.save(os.path.join(app.config["UPLOAD_FOLDER"], file.filename))
         user.profilephoto = file.filename
         db.session.add(user)
