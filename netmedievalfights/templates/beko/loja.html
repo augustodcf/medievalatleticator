@@ -180,6 +180,7 @@ p
   {%- endwith %}
 
 {% if userpower == '1' %}
+<div style="margin-left: 12%; margin-bottom: 20px">
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addprod">Adicionar novo produto</button>
 
 <div class="modal fade" id="addprod" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -332,18 +333,46 @@ p
         </div>
       </div>
 
+</div>
 {% endif %}
+
+
 
 <div class="container">
   <div class="row">
     {% for row in produtos.contents %}
-        <div class="{{row['id']}}">{{row["nome"]}} <br>
-          {{row["tamanhos"]}} <br>
-          {{row["cores"]}}
+    
+        <div clas="card" style="width: 18rem;">
+        <img class="card-img-top" src="https://static.zattini.com.br/produtos/jaqueta-new-york-yankees-new-era-2-em-1-varsity-1-masculina/12/F83-5478-012/F83-5478-012_zoom1.jpg?ts=1601715795" alt="Card image cap">
+        <div class="card-body">
+        <h5 class="card-title">{{row["nome"]}}</h5> <br>
+          <form method="POST" action="/lojacomprachat" >
+            Tamanhos
+            <br>
+            {% for cadatamanho in row["tamanhos"].contents %} 
+              <input type="checkbox" id="{{cadatamanho['tamanho']}}" name="{{cadatamanho['tamanho']}}">
+              <label for="scales">{{cadatamanho['tamanho']}}</label>
+              <br>
+            {% endfor %}
+            <br>
+            Cores
+            <br>
+            {% for cadacor in row["cores"].contents %} 
+              <input type="checkbox" id="{{cadacor['cor']}}" name="{{cadacor['cor']}}"
+              >
+              <label for="scales">{{cadacor['cor']}}</label>
+              <br>
+            {% endfor %}
+            <br>
+            <button class="btn btn-primary">Eu quero</button>
+          </form>
         </div>
+        </div>
+      
     {% endfor %}
+    </div>
   </div>
-</div>
+
 
 
 <!--
