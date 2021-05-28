@@ -316,7 +316,7 @@ p
 
                 <br>
 
-                Cores já adicionadas no sistema: 
+                Tamanhos já adicionados no sistema: 
                 <ul class="list-group">
                 {% for cadatamanho in tamanhos.contents %}
                     <li class="list-group-item">{{cadatamanho["tamanho"]}}</li>
@@ -343,31 +343,41 @@ p
   <div class="row">
     {% for row in produtos.contents %}
     
-        <div clas="card" style="width: 18rem;">
+        <div clas="card" style="width: 18rem; margin-left: 5px; margin-right: 5px; margin-top: 10px; background-color: Lightgray">
         <img class="card-img-top" src="https://static.zattini.com.br/produtos/jaqueta-new-york-yankees-new-era-2-em-1-varsity-1-masculina/12/F83-5478-012/F83-5478-012_zoom1.jpg?ts=1601715795" alt="Card image cap">
         <div class="card-body">
         <h5 class="card-title">{{row["nome"]}}</h5> <br>
           <form method="POST" action="/lojacomprachat" >
-            
-            Tamanhos
+            <input type="text" name="nome" value='{{row["nome"]}}' style="display: none">
+            <b>Preço</b>: R$ {{row["preco"]}}
+            <br><br>
+
+            <b>Descrição</b>: {{row["descricao"]}}
+            <br><br>
+
+            <b>Tamanho</b>
             <br>
-            
+            <select style="width: 80%" name="tamanho">
+            <option value="--" >--</option>   
             {% for cadatamanho in row["tamanhos"].contents %} 
-              <input type="checkbox" id="{{cadatamanho['tamanho']}}" name="{{cadatamanho['tamanho']}}">
-              {{cadatamanho['tamanho']}}
-              <br>
+              <option value="{{cadatamanho['tamanho']}}" name="tamanho">
+              {{cadatamanho['tamanho']}}</option>
             {% endfor %}
+            </select>
             
+            <br><br>
+            <b>Cor</b>
             <br>
-            Cores
-            <br>
+            <select style="width: 80%" name="cor">
+            <option value="--" >--</option> 
             {% for cadacor in row["cores"].contents %} 
-              <input type="checkbox" id="{{cadacor['cor']}}" name="{{cadacor['cor']}}"
+              <option value="{{cadacor['cor']}}" name="cor"
               >
               {{cadacor['cor']}}
-              <br>
+              </option>
             {% endfor %}
-            <br>
+            </select>
+            <br><br>
             <button class="btn btn-primary">Eu quero</button>
           </form>
         </div>
@@ -379,43 +389,7 @@ p
 
 
 
-<!--
-<video style="z-index:-1;" src="{{url_for('static', filename='video/armadures.mp4')}}" autoplay="true" loop="true" width="100%" muted="true">
-</video>
 
-<n1>
-
-    <search> PESQUISA </search>
-    <news> TESTE </news>
-
-</n1>
-
-<style>
-
-    n1 {
-    position: absolute; 
-    top: 12%; 
-    left: 0; 
-    width: 100%;
-    height: 100%;
-
-
-    }
-    n1 news {
-    position: relative; 
-    width: 50%;
-    height: 100%;
-    float: right;
-    background-image: linear-gradient(rgba(0%, 0%, 0%, .0), black);
-
-    n1 search{
-    position: relative; 
-    width: 50%;
-    float: left;
-
-    }
-}
--->
 {% endblock %}
 </body>
 

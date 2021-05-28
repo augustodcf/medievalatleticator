@@ -456,6 +456,54 @@ def loja():
                            tamanhos=relacaodetamanhos,
                            cores=relacaodecores,)
 
+@app.route("/lojacomprachat", methods=["GET", "POST"])
+def lojacomprachat():
+    user = Users.query.filter_by(idUser=str(current_user).strip('<>').replace('Users ', '')).first()
+    if request.method == "POST":
+        try:
+            nome_arquivo = "templates/chat/"+str(user.idUser)+".html"
+            arquivo = open(nome_arquivo, 'r+')
+        except FileNotFoundError:
+            arquivo = open(nome_arquivo, 'w+')
+        mensagemanteriores = arquivo.read()
+        arquivo.write("<b>"+str(user.username)+"</b> disse: Olá, fiquei interessado em um " + request.form["nome"] + " do tamanho " + request.form["tamanho"] + " e da cor " + request.form["cor"]+"<br><br>")
+        # faca o que quiser
+        arquivo.close()
+    return redirect('/loja')
+
+@app.route("/chatresponde", methods=["GET", "POST"])
+def chatresponde():
+    user = Users.query.filter_by(idUser=str(current_user).strip('<>').replace('Users ', '')).first()
+    if request.method == "POST":
+        nome_arquivo = "templates/chat/"+request.form["id"]+".html"
+        arquivo = open(nome_arquivo, 'w+')
+        arquivo.writelines("<b>"+str(user.username)+"</b> disse: "+request.form["mensagem"]+"<br><br>")
+        # faca o que quiser
+        arquivo.close()
+
+        if user.idUser == request.form["id"]:
+            return redirect('/chat')
+        else:
+            return redirect('/chat/'+request.form["id"])
+
+@app.route("/chat/<string:PageAddresi>", methods=["GET", "POST"])
+def route_page(PageAddresi):
+    user = Users.query.filter_by(idUser=str(current_user).strip('<>').replace('Users ', '')).first()
+    if user.power == "1":
+        chat = open("templates/chat/" + str(PageAddresi) + ".html", "r")
+        return chat.read()
+    else:
+        return "Você não pode ver essa página."
+
+@app.route("/chat", methods=["GET", "POST"])
+def chat():
+
+    user = Users.query.filter_by(idUser=str(current_user).strip('<>').replace('Users ', '')).first()
+    chat = open("templates/chat/"+str(user.idUser)+".html", "r")
+    return chat.read()
+
+
+
 @app.route("/lojacor", methods=["GET", "POST"])
 def lojacor():
     if request.method == "POST":
@@ -1184,6 +1232,7 @@ def register():
             user = Users(username=form.username.data, password=form.psw.data, email=form.email.data, power=power)
             db.session.add(user)
             db.session.commit()
+            nome_arquivo = "templates/chat/" + request.form["id"] + ".html"
             return redirect(url_for('login'))
     return render_template('/beko/userregisterwtf.html', form=form)
 
@@ -1205,6 +1254,11 @@ def login():
             login_user(user)
 
 
+            try:
+                nome_arquivo = "templates/chat/" + str(user.idUser) + ".html"
+                arquivo = open(nome_arquivo, 'r+')
+            except FileNotFoundError:
+                arquivo = open(nome_arquivo, 'w+')
 
             #next = request.args.get('next')
             # is_safe_url should check if the url is safe for redirects.
