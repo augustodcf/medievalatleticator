@@ -1,25 +1,18 @@
 <!doctype html>
 <html lang="en">
-
+{% block content %}
 <head>
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-<script>
-
-$(function(){
-$('#chat').load("/chat/{{id}}.html");
-});
-
-</script>
 	
 </head>
 
 <body>
 	
-<div id="chat"></div>
+<iframe src="\chat" name="iframe_a"></iframe>
+
 
 
  	
@@ -27,5 +20,5 @@ $('#chat').load("/chat/{{id}}.html");
  
 
 
-
+{% endblock %}
 </html>

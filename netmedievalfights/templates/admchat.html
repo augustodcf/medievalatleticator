@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+{% block content %}
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+
+
+	
+</head>
+
+<body>
+<script>
+	function carretaessechat()
+	chat = document.getElementById("chat");
+	selecao = document.getElementById("selecao");
+	chat.src = selecao.value;
+
+</script>
+
+
+	Selecione um chat:
+	<select id="selecao" name="name">
+	{% for eachuser in allusers.contents %}
+  <option value="\chat\{{eachuser['idUser']}}">{{eachuser["username"]}}</option>
+  {% endfor %}
+	</select>
+	<button onclick="carregaessechat()">Go</button>
+  <br><br>
+
+
+<iframe src="\chat" id="chat">
+</iframe>
+
+
+
+ 	
+</body>
+ 
+
+
+{% endblock %}
+</html>

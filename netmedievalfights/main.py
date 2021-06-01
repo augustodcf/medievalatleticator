@@ -9,6 +9,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, DateField
 from wtforms.validators import DataRequired
+from datetime import datetime
+
+
 
 
 app = Flask(__name__)
@@ -458,6 +461,7 @@ def loja():
 
 @app.route("/lojacomprachat", methods=["GET", "POST"])
 def lojacomprachat():
+    today = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
     user = Users.query.filter_by(idUser=str(current_user).strip('<>').replace('Users ', '')).first()
     if request.method == "POST":
         try:
@@ -466,25 +470,46 @@ def lojacomprachat():
         except FileNotFoundError:
             arquivo = open(nome_arquivo, 'w+')
         mensagemanteriores = arquivo.read()
-        arquivo.write("<b>"+str(user.username)+"</b> disse: Olá, fiquei interessado em um " + request.form["nome"] + " do tamanho " + request.form["tamanho"] + " e da cor " + request.form["cor"]+"<br><br>")
+        arquivo.write(str(today)+" <b>"+str(user.username)+"</b> disse: Olá, fiquei interessado em um " + request.form["nome"] + " do tamanho " + request.form["tamanho"] + " e da cor " + request.form["cor"]+"<br><br>")
         # faca o que quiser
         arquivo.close()
     return redirect('/loja')
 
 @app.route("/chatresponde", methods=["GET", "POST"])
 def chatresponde():
+    today = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
     user = Users.query.filter_by(idUser=str(current_user).strip('<>').replace('Users ', '')).first()
     if request.method == "POST":
-        nome_arquivo = "templates/chat/"+request.form["id"]+".html"
-        arquivo = open(nome_arquivo, 'w+')
-        arquivo.writelines("<b>"+str(user.username)+"</b> disse: "+request.form["mensagem"]+"<br><br>")
+        print(request.form)
+        donodochat = Users.query.filter_by(username=request.form["username"]).first()
+        nome_arquivo = "templates/chat/"+str(donodochat.idUser)+".html"
+        arquivo = open(nome_arquivo, 'r+')
+        mensagemanteriores = arquivo.read()
+        arquivo.write(str(today)+" <b>"+str(user.username)+"</b> disse: "+request.form["mensagem"]+"<br><br>")
         # faca o que quiser
         arquivo.close()
 
-        if user.idUser == request.form["id"]:
-            return redirect('/chat')
+        if user.idUser == donodochat.idUser:
+            return redirect('/loja')
         else:
             return redirect('/chat/'+request.form["id"])
+
+@app.route("/admchat", methods=["GET", "POST"])
+def admchat():
+    user = Users.query.filter_by(idUser=str(current_user).strip('<>').replace('Users ', '')).first()
+    if user.power == "1":
+        allusers = {'headers': ['idUser', 'unsername'],
+                             'contents': []
+                              }
+        for eachuser in Users.query.filter_by():
+            dic = {
+                'idUser': eachuser.idUser,
+                'username': eachuser.username,
+            }
+            allusers['contents'].append(dic)
+        return render_template("admchat.html", allusers=allusers )
+    else:
+        return "Você não pode ver essa página."
 
 @app.route("/chat/<string:PageAddresi>", methods=["GET", "POST"])
 def route_page(PageAddresi):
@@ -501,7 +526,6 @@ def chat():
     user = Users.query.filter_by(idUser=str(current_user).strip('<>').replace('Users ', '')).first()
     chat = open("templates/chat/"+str(user.idUser)+".html", "r")
     return chat.read()
-
 
 
 @app.route("/lojacor", methods=["GET", "POST"])
