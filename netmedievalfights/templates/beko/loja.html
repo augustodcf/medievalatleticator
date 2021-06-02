@@ -203,8 +203,8 @@ p
                                   };
 
               </script>
-              <form id="editorform1" method="POST" action="/loja" >
-
+              <form id="editorform1" method="POST" action="/loja" enctype=multipart/form-data >
+                Imagem: <input name="fotodoproduto" type="file" id="fileupload" accept="image/*"> <br>
 
                 Nome: <input type='text' name='name' value="" class="form-control" >     <br>
                 
@@ -269,15 +269,23 @@ p
 
                 <br>
 
-                Cores já adicionadas no sistema: 
+               
+                <button value='submit' class="btn btn-primary">Submit</button>
+              
+              </form>
+               Cores já adicionadas no sistema: 
                 <ul class="list-group">
                 {% for cadacor in cores.contents %}
-                    <li class="list-group-item">{{cadacor["cor"]}}</li>
+                    <li class="list-group-item">{{cadacor["cor"]}} 
+
+                      <form method="POST" action="/deletecor">
+                      <input type="text" value="{{cadacor['cor']}}" name="name" style=" visibility: hidden;">
+                      <button class="btn btn-danger">Delete</button>
+                    </form>
+                  </li>
                 {% endfor %}
 
                 <br><br>
-                <button value='submit' class="btn btn-primary">Submit</button>
-              </form>
             </div>
             <div class="modal-footer">
               
@@ -290,7 +298,7 @@ p
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addtamanho">Gerenciar Tamanhos</button>
 
 <div class="modal fade" id="addtamanho" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+             <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
 
             <div class="modal-header">
@@ -301,14 +309,8 @@ p
             </div>
 
             <div class="modal-body">
-                <script>
-                function sendEditor3(){
-                  document.getElementById('editorform3').submit();
-                  window.location.href = "/lojatamanho"
-                                  };
-
-              </script>
-              <form id="editorform3" method="POST" action="/lojatamanho" >
+  
+              <form id="editorform2" method="POST" action="/lojatamanho" >
 
 
                 Nome: <input type='text' name='name' value="" class="form-control" >     <br>
@@ -316,15 +318,23 @@ p
 
                 <br>
 
-                Tamanhos já adicionados no sistema: 
+               
+                <button value='submit' class="btn btn-primary">Submit</button>
+              
+              </form>
+               Tamanhos já adicionadas no sistema: 
                 <ul class="list-group">
                 {% for cadatamanho in tamanhos.contents %}
-                    <li class="list-group-item">{{cadatamanho["tamanho"]}}</li>
+                    <li class="list-group-item">{{cadatamanho["tamanho"]}} 
+
+                      <form method="POST" action="/deletetamanho">
+                      <input type="text" value="{{cadatamanho['tamanho']}}" name="name" style=" visibility: hidden;">
+                      <button class="btn btn-danger">Delete</button>
+                    </form>
+                  </li>
                 {% endfor %}
 
                 <br><br>
-                <button value='submit' class="btn btn-primary">Submit</button>
-              </form>
             </div>
             <div class="modal-footer">
               
@@ -332,6 +342,8 @@ p
             </div>
           </div>
         </div>
+      </div>
+
       </div>
 
 </div>
@@ -344,7 +356,7 @@ p
     {% for row in produtos.contents %}
     
         <div clas="card" style="width: 18rem; margin-left: 5px; margin-right: 5px; margin-top: 10px; background-color: Lightgray">
-        <img class="card-img-top" src="https://static.zattini.com.br/produtos/jaqueta-new-york-yankees-new-era-2-em-1-varsity-1-masculina/12/F83-5478-012/F83-5478-012_zoom1.jpg?ts=1601715795" alt="Card image cap">
+        <img class="card-img-top" src="static/page/{{row['img']}}" alt="Card image cap">
         <div class="card-body">
         <h5 class="card-title">{{row["nome"]}}</h5> <br>
           <form method="POST" action="/lojacomprachat" >
@@ -380,6 +392,12 @@ p
             <br><br>
             <button class="btn btn-primary">Eu quero</button>
           </form>
+          {% if userpower == '1' %}
+          <form  method="POST" action="/deleteproduto" >
+          <button class="btn btn-danger">Delete</button>
+          <input type="text" name="name" value="{{row['nome']}}" style=" visibility: hidden;">
+          </form>
+          {% endif %}
         </div>
         </div>
       

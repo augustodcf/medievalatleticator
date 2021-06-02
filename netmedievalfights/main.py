@@ -113,6 +113,7 @@ class Produto(db.Model):
     descricao = db.Column(db.String(45), unique=False, nullable=True)
     preco = db.Column(db.Float, unique=False, nullable=False)
     esconder = db.Column(db.SmallInteger,  unique=False, nullable=True)
+    imagem = db.Column(db.String(45), unique=True, nullable=True)
 
 class Cor(db.Model):
     cor_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -356,7 +357,12 @@ def index():
 @app.route("/loja", methods=["GET", "POST"])
 def loja():
     user = Users.query.filter_by(idUser=str(current_user).strip('<>').replace('Users ', '')).first()
-    relacaodeprodutosvisiveis = {'headers': ['id', 'nome', 'descricao', 'preco', 'tamanhos', 'cores'],
+    userphoto = user.profilephoto
+    if user.profilephoto == None:
+        userphoto = "person.png"
+
+
+    relacaodeprodutosvisiveis = {'headers': ['id', 'nome', 'descricao', 'preco', 'tamanhos', 'cores', 'img'],
                              'contents': []
                               }
     relacaodetamanhos = {'headers': ['tamanho'],
@@ -375,10 +381,6 @@ def loja():
         relacaodecores['contents'].append(dic)
 
 
-    if user.profilephoto == None:
-        userphoto = "person.png"
-    else:
-        userphoto = user.profilephoto
 
     produtosdisponiveis = Produto.query.filter_by(esconder=None)
 
@@ -400,7 +402,10 @@ def loja():
             nomedotamanho = Tamanho.query.filter_by(tamanho_id=tamanhodoproduto.tamanho_tamanho_id).first()
             dic = {'tamanho': nomedotamanho.name}
             relacaodetamanhosdoproduto['contents'].append(dic)
-#
+
+        imagem = produtovisivel.imagem
+        if produtovisivel.imagem == None:
+            imagem = "Ecommerce-Product-icon.png"
         dic = {
             'id': produtovisivel.produto_id,
             'nome': produtovisivel.name,
@@ -408,6 +413,7 @@ def loja():
             'preco': produtovisivel.preco,
             'tamanhos': relacaodetamanhosdoproduto,
             'cores': relacaodecoresdoproduto,
+            'img': imagem,
         }
         relacaodeprodutosvisiveis['contents'].append(dic)
 
@@ -423,11 +429,19 @@ def loja():
             erro = 1
             flash("Digite um preço")
         if erro == 0:
+            print(request)
             novoproduto = Produto()
             novoproduto.name = request.form["name"]
             novoproduto.descricao = request.form["descricao"]
             novoproduto.preco = request.form["preco"]
             novoproduto.preco = float(novoproduto.preco.replace(",", "."))
+            file = request.files['fotodoproduto']
+            if file.filename[-4::] == "":
+                print("produto sem imagem")
+            else:
+                file.filename = "produto" + request.form["name"] + file.filename[-4::]
+                file.save(os.path.join(app.config["UPLOAD_FOLDER"], file.filename))
+                novoproduto.imagem = file.filename
             db.session.add(novoproduto)
             db.session.commit()
             for itemdoformulario in request.form:
@@ -530,23 +544,87 @@ def chat():
 
 @app.route("/lojacor", methods=["GET", "POST"])
 def lojacor():
+    user = Users.query.filter_by(idUser=str(current_user).strip('<>').replace('Users ', '')).first()
     if request.method == "POST":
-        novacor = Cor()
-        novacor.name = request.form["name"]
-        db.session.add(novacor)
-        db.session.commit()
-        flash("Cor adicionada com sucesso.")
+        if int(user.power) < 1:
+            flash("Você não pode fazer isso")
+        else:
+            novacor = Cor()
+            novacor.name = request.form["name"]
+            db.session.add(novacor)
+            db.session.commit()
+            flash("Cor adicionada com sucesso.")
+
+    return redirect('/loja')
+
+@app.route("/deletecor", methods=["GET", "POST"])
+def deletecor():
+    user = Users.query.filter_by(idUser=str(current_user).strip('<>').replace('Users ', '')).first()
+    if request.method == "POST":
+        if int(user.power) < 1:
+            flash("Você não pode fazer isso")
+        else:
+            essacor = Cor.query.filter_by(name=request.form["name"]).first()
+            coresdoproduto = Produto_has_cor.query.filter_by(cor_cor_id=essacor.cor_id)
+            for cdp in coresdoproduto:
+                db.session.delete(cdp)
+            db.session.delete(essacor)
+            db.session.commit()
+            flash("Cor deletada com sucesso.")
+
+    return redirect('/loja')
+
+@app.route("/deleteproduto", methods=["GET", "POST"])
+def deleteproduto():
+    user = Users.query.filter_by(idUser=str(current_user).strip('<>').replace('Users ', '')).first()
+    if request.method == "POST":
+        if int(user.power) < 1:
+            flash("Você não pode fazer isso")
+        else:
+            esseproduto = Produto.query.filter_by(name=request.form["name"]).first()
+            coresdoproduto = Produto_has_cor.query.filter_by(produto_produto_id=esseproduto.produto_id)
+            for cdp in coresdoproduto:
+                db.session.delete(cdp)
+                db.session.commit()
+            tamanhosdoproduto = Produto_has_tamanho.query.filter_by(produto_produto_id=esseproduto.produto_id)
+            for tdp in tamanhosdoproduto:
+                db.session.delete(tdp)
+                db.session.commit()
+            db.session.delete(esseproduto)
+            db.session.commit()
+            flash("Produto deletado com sucesso.")
+
+    return redirect('/loja')
+
+@app.route("/deletetamanho", methods=["GET", "POST"])
+def deletetamanho():
+    user = Users.query.filter_by(idUser=str(current_user).strip('<>').replace('Users ', '')).first()
+    if request.method == "POST":
+        if int(user.power) < 1:
+            flash("Você não pode fazer isso")
+        else:
+            essetamanho = Tamanho.query.filter_by(name=request.form["name"]).first()
+            coresdoproduto = Produto_has_tamanho.query.filter_by(tamanho_tamanho_id=essetamanho.tamanho_id)
+            for tdp in coresdoproduto:
+                db.session.delete(tdp)
+            db.session.delete(essetamanho)
+            db.session.commit()
+            flash("Tamanho deletado com sucesso.")
 
     return redirect('/loja')
 
 @app.route("/lojatamanho", methods=["GET", "POST"])
 def lojatamanho():
+    user = Users.query.filter_by(idUser=str(current_user).strip('<>').replace('Users ', '')).first()
     if request.method == "POST":
-        novotamanho = Tamanho()
-        novotamanho.name = request.form["name"]
-        db.session.add(novotamanho)
-        db.session.commit()
-        flash("Tamanho adicionado com sucesso.")
+        if int(user.power) < 1:
+            flash("Você não pode fazer isso")
+        else:
+            novotamanho = Tamanho()
+            novotamanho.name = request.form["name"]
+            db.session.add(novotamanho)
+            db.session.commit()
+            flash("Tamanho adicionado com sucesso.")
 
     return redirect('/loja')
 
