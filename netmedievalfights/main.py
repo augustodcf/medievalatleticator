@@ -494,8 +494,12 @@ def chatresponde():
     today = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
     user = Users.query.filter_by(idUser=str(current_user).strip('<>').replace('Users ', '')).first()
     if request.method == "POST":
-        print(request.form)
-        donodochat = Users.query.filter_by(username=request.form["username"]).first()
+        donodochat = Users()
+        iddodono = request.form["username"].replace("/chat/","")
+        if Users.query.filter_by(idUser=iddodono).first():
+            donodochat = Users.query.filter_by(idUser=iddodono).first()
+        else:
+            donodochat = Users.query.filter_by(username=request.form["username"]).first()
         nome_arquivo = "templates/chat/"+str(donodochat.idUser)+".html"
         arquivo = open(nome_arquivo, 'r+')
         mensagemanteriores = arquivo.read()
@@ -506,7 +510,7 @@ def chatresponde():
         if user.idUser == donodochat.idUser:
             return redirect('/loja')
         else:
-            return redirect('/chat/'+request.form["id"])
+            return redirect('/admchat')
 
 @app.route("/admchat", methods=["GET", "POST"])
 def admchat():
@@ -1334,7 +1338,6 @@ def register():
             user = Users(username=form.username.data, password=form.psw.data, email=form.email.data, power=power)
             db.session.add(user)
             db.session.commit()
-            nome_arquivo = "templates/chat/" + request.form["id"] + ".html"
             return redirect(url_for('login'))
     return render_template('/beko/userregisterwtf.html', form=form)
 
