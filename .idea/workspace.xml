@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="9d5b60b7-17d2-4842-b837-6ad92a0cfd82" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/netmedievalfights/templates/beko/home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/netmedievalfights/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/netmedievalfights/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/netmedievalfights/medievalfights v2.3_14.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/netmedievalfights/qwikliftighfts2 v 3_14.mwb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/netmedievalfights/static/page/Johny Cash_Afghanistan _armagedon.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/netmedievalfights/static/page/Rosa de Ferro_Brazil.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/netmedievalfights/static/page/Tony Tornadon_Cambodia.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/netmedievalfights/static/page/Ubaba de Mesquita_Brazil.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/netmedievalfights/static/page/boça_Afghanistan_globo_header.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/netmedievalfights/static/page/boça_Afghanistan_po-piopi_globo.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/netmedievalfights/static/page/joao_Chile_joao_ubaubauba.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/netmedievalfights/static/page/standard-header.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/netmedievalfights/static/page/standard-photo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/netmedievalfights/static/page/the boys_Afghanistan.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/netmedievalfights/static/page/time cota_Cameroon.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/netmedievalfights/templates/beko/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/netmedievalfights/templates/beko/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/netmedievalfights/templates/beko/indexdogabriel.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/netmedievalfights/templates/beko/navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/netmedievalfights/templates/beko/navbar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/netmedievalfights/uploads/Forzan_Afghanistan .jpg" beforeDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="medievalatleticator" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/netmedievalfights" />
+  </component>
+  <component name="ProjectId" id="1r7gEMd17rRPfWXOdH4nXvKcKGy" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/netmedievalfights/templates/beko" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Augusto\Documents\GitHub\medievalatleticator\netmedievalfights\templates\beko" />
+      <recent name="C:\Users\Augusto\Documents\GitHub\medievalatleticator\netmedievalfights\templates" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Augusto\Documents\GitHub\medievalatleticator\netmedievalfights\static\css" />
+      <recent name="C:\Users\Augusto\Documents\GitHub\medievalatleticator\netmedievalfights\static\img\New folder" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="medievalatleticator" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Python\Python37\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/netmedievalfights" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/netmedievalfights/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="medievalatleticator" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="C:\Python\Python37\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/netmedievalfights" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/netmedievalfights/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9d5b60b7-17d2-4842-b837-6ad92a0cfd82" name="Default Changelist" comment="" />
+      <created>1618332429233</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1618332429233</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/netmedievalfights/main.py</url>
+          <line>506</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/netmedievalfights/main.py</url>
+          <line>504</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="request" language="Python" />
+        <watch expression="request.form" language="Python" />
+        <watch expression="iddodono" language="Python" />
+      </configuration>
+    </watches-manager>
+  </component>
+</project>
