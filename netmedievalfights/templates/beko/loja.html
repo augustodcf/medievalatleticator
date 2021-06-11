@@ -1,0 +1,472 @@
+
+
+
+
+
+
+{% extends 'beko/navbar.html' %}
+{% block styles -%}
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> 
+    <!--link rel="stylesheet" type="text/css" href="{{url_for('static', filename='/css/bootstrap.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='/css/bootstrap-theme.css')}}"-->
+
+{% endblock %}
+
+
+
+
+<style>
+ .jumbotron {
+  margin-top: 1em;  // add a little space
+}
+
+#slide_background {
+  transition: all 0.3s 0.3s;
+}
+#slide,
+#slide_wrapper {
+  transition: all 0.3s ease-out;
+}
+#slide {
+  transform: translateX(0) translateY(-40%);
+}
+.popup_visible #slide {
+  transform: translateX(0) translateY(0);
+}
+
+
+
+.container
+{
+    margin-top: 5px;
+    width: 98%;
+}
+
+
+
+p
+{
+    padding: 0px;
+}
+.form-signin
+{
+
+    text-align: center;
+    margin: auto;
+    width: 300px;
+}
+
+
+.col-md-12
+{
+    width:100%;
+}
+
+.alert
+{
+    width: 300px;
+    margin: auto;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.panel-title
+{
+    padding-top:0px;
+}
+
+.navbar-brand, .navbar>.container-fluid .navbar-brand
+{
+    background-image: url(/favicon.ico);
+    background-repeat: no-repeat;
+    font-size: 32px;
+    padding-left: 60px;
+    margin-left: 5px;
+}
+
+.navbar-nav
+{
+    float: right;
+    flex-direction: row;
+}
+
+.navbar
+{
+    margin-botton:0px;
+}
+
+#map {
+    height: 400px;
+}
+
+.formfield
+{
+    padding: 10px;
+}
+
+.td, .th{
+    table-layout: fixed;
+    word-wrap: break-word;
+    word-break: break-all;
+    padding: 0px;
+    vertical-align: baseline;
+}
+
+.btn-alignRight {
+    float: right;
+}
+
+.btn-group
+{
+    display: flex;
+}
+.btn-group>.btn
+{
+    width: 40px;
+}
+
+.profile_img
+{
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+}
+
+.profile_head
+{
+    padding-botton: 20px;
+    text-align: center;
+}
+
+.profile_body
+{
+    padding-botton: 20px;
+    text-align: center;
+}
+
+.profile_footer
+{
+    text-align: center;
+}
+
+</style>
+
+{% block content %}
+
+<!--script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script-->
+
+
+
+
+<body >
+
+
+{# Loads some of the macros included with Flask-Bootstrap. We are using the
+   utils module here to automatically render Flask's flashed messages in a
+   bootstrap friendly manner #}
+{% import "bootstrap/utils.html" as utils %}
+
+{%- with messages = get_flashed_messages(with_categories=True) %}
+ {%- if messages %}
+    <div class="row">
+      <div class="col-md-12">
+        {{utils.flashed_messages(messages)}}
+      </div>
+    </div>
+  {%- endif %}
+  {%- endwith %}
+
+{% if userpower == '1' %}
+<div style="margin-left: 12%; margin-bottom: 20px">
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addprod">Adicionar novo produto</button>
+
+<div class="modal fade" id="addprod" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Adicionar produto</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
+            <div class="modal-body">
+                <script>
+                function sendEditor1(){
+                  document.getElementById('editorform1').submit();
+                  window.location.href = "/loja"
+                                  };
+
+              </script>
+              <form id="editorform1" method="POST" action="/loja" enctype=multipart/form-data >
+                Imagem: <input name="fotodoproduto" type="file" id="fileupload" accept="image/*"> <br>
+
+                Nome: <input type='text' name='name' value="" class="form-control" >     <br>
+                
+                Descrição: <input type='text' name='descricao' value="" class="form-control" > <br>
+
+                Preço: <input type='text' name='preco' value="" class="form-control" >
+
+                <br><br>
+
+                Tamanhos:       
+                {% for cadatamanho in tamanhos.contents %}
+                    <li class="list-group-item">{{cadatamanho["tamanho"]}} <input type="checkbox" id="scales" name="tamanho-{{cadatamanho['tamanho']}}" value="tamanho-{{cadatamanho['tamanho']}}"></li>
+                {% endfor %}
+
+                <br><br>
+
+                Cores: 
+                <ul class="list-group">
+                {% for cadacor in cores.contents %}
+                    <li class="list-group-item">{{cadacor["cor"]}} <input type="checkbox" id="scales" name="cor-{{cadacor['cor']}}" value="cor-{{cadacor['cor']}}"></li>
+                {% endfor %}
+
+                <br><br>
+                <button value='submit'  style='width: 100%' class="btn btn-primary">Submit</button>
+
+              </form>
+            </div>
+            <div class="modal-footer">
+              
+              <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addcor">Gerenciar cores</button>
+
+<div class="modal fade" id="addcor" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Gerenciar Cores</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
+            <div class="modal-body">
+                <script>
+                function sendEditor2(){
+                  document.getElementById('editorform2').submit();
+                  window.location.href = "/lojacor"
+                                  };
+
+              </script>
+              <form id="editorform2" method="POST" action="/lojacor" >
+
+
+                Nome: <input type='text' name='name' value="" class="form-control" >     <br>
+                
+
+                <br>
+
+               
+                <button value='submit' class="btn btn-primary">Submit</button>
+              
+              </form>
+               Cores já adicionadas no sistema: 
+                <ul class="list-group">
+                {% for cadacor in cores.contents %}
+                    <li class="list-group-item">{{cadacor["cor"]}} 
+
+                      <form method="POST" action="/deletecor">
+                      <input type="text" value="{{cadacor['cor']}}" name="name" style=" visibility: hidden;">
+                      <button class="btn btn-danger">Delete</button>
+                    </form>
+                  </li>
+                {% endfor %}
+
+                <br><br>
+            </div>
+            <div class="modal-footer">
+              
+              <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addtamanho">Gerenciar Tamanhos</button>
+
+<div class="modal fade" id="addtamanho" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+             <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Gerenciar Tamanhos</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
+            <div class="modal-body">
+  
+              <form id="editorform2" method="POST" action="/lojatamanho" >
+
+
+                Nome: <input type='text' name='name' value="" class="form-control" >     <br>
+                
+
+                <br>
+
+               
+                <button value='submit' class="btn btn-primary">Submit</button>
+              
+              </form>
+               Tamanhos já adicionadas no sistema: 
+                <ul class="list-group">
+                {% for cadatamanho in tamanhos.contents %}
+                    <li class="list-group-item">{{cadatamanho["tamanho"]}} 
+
+                      <form method="POST" action="/deletetamanho">
+                      <input type="text" value="{{cadatamanho['tamanho']}}" name="name" style=" visibility: hidden;">
+                      <button class="btn btn-danger">Delete</button>
+                    </form>
+                  </li>
+                {% endfor %}
+
+                <br><br>
+            </div>
+            <div class="modal-footer">
+              
+              <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      </div>
+
+</div>
+{% endif %}
+
+
+
+<div class="container">
+  <div class="row">
+    {% for row in produtos.contents %}
+    
+        <div clas="card" style="width: 36rem; margin-left: 5px; margin-right: 5px; margin-top: 10px; background-color: Lightgray">
+        <img class="card-img-top" src="static/page/{{row['img']}}" alt="Card image cap">
+        <div class="card-body">
+        <h5 class="card-title">{{row["nome"]}}</h5> <br>
+          <form method="POST" action="/lojacomprachat" >
+            <input type="text" name="nome" value='{{row["nome"]}}' style="display: none">
+            <b>Preço</b>: R$ {{row["preco"]}}
+            <input type="text" name="preco" value="{{row['preco']}}" style=" visibility: hidden;">
+            <br><br>
+
+            <b>Descrição</b>: {{row["descricao"]}}
+            <br><br>
+
+            <b>Tamanho</b>
+            <br>
+            <select style="width: 80%" name="tamanho">
+            <option value="--" >--</option>   
+            {% for cadatamanho in row["tamanhos"].contents %} 
+              <option value="{{cadatamanho['tamanho']}}" name="tamanho">
+              {{cadatamanho['tamanho']}}</option>
+            {% endfor %}
+            </select>
+            
+            <br><br>
+            <b>Cor</b>
+            <br>
+            <select style="width: 80%" name="cor">
+            <option value="--" >--</option> 
+            {% for cadacor in row["cores"].contents %} 
+              <option value="{{cadacor['cor']}}" name="cor"
+              >
+              {{cadacor['cor']}}
+              </option>
+            {% endfor %}
+            </select>
+            <br><br>
+            <button class="btn btn-primary">Eu quero</button>
+          </form>
+          {% if userpower == '1' %}
+          <form  method="POST" action="/deleteproduto" >
+          <button class="btn btn-danger">Delete</button>
+          <input type="text" name="name" value="{{row['nome']}}" style=" visibility: hidden;">
+          </form>
+          {% endif %}
+        </div>
+        </div>
+      
+    {% endfor %}
+    </div>
+  </div>
+
+<!-- chat icon -->
+ <style>
+ #whats-icon{
+
+    position: fixed;
+    bottom: 0;
+    float: right;
+    z-index: 10;
+    height: 60px;
+    width: 60px;
+    margin-left: 20px;
+    margin-bottom: 5px;
+  }
+
+   #whats-icon:hover{
+    transition: 0.5;
+    border: 1px solid white;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
+    border-radius: 80px;
+   }
+</style>
+
+    {% if chatstatus == 1 %}
+    <img data-toggle="modal" data-target="#chat" src="static/page/mensagem.png" id="whats-icon" style="width: 120px; height: 120px" >
+    {% else %}
+    <img data-toggle="modal" data-target="#chat" src="static/page/nomensagem.png" id="whats-icon" style="width: 120px; height: 120px" >
+    {% endif %}
+
+
+<div class="modal fade" id="chat" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Chat</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
+            <div class="modal-body">
+                <iframe src="\chat" name="iframe_a" style="width: 100%"></iframe>
+
+              <form id="editorform2" method="POST" action="/chatresponde">
+
+                <input type="text" name="mensagem" id=>
+                
+                <input type="text" name="username" value="{{username}}" style=" visibility: hidden;">
+
+                <br><br>
+                <button value='submit' class="btn btn-primary">Enviar</button>
+              </form>
+            </div>
+            <div class="modal-footer">
+              
+              <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+{% endblock %}
+</body>
+
