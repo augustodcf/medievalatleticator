@@ -63,13 +63,13 @@ def load_user(user_id):
     return user
 
 
-class News(db.Model):
-    news_id =  db.Column(db.Integer, primary_key=True, autoincrement=True)
-    img = db.Column(db.String(255), unique=True, nullable=False)
-    htmlinterno = db.Column(db.String(45), unique=True, nullable=False)
-    titulo = db.Column(db.String(45), unique=False, nullable=False)
-    delete = db.Column(db.SmallInteger,  unique=False, nullable=True)
-    dt_public = db.Column(db.TIMESTAMP(6), unique=False, nullable=True)
+#class News(db.Model):
+#    news_id =  db.Column(db.Integer, primary_key=True, autoincrement=True)
+#    img = db.Column(db.String(255), unique=True, nullable=False)
+#    htmlinterno = db.Column(db.String(45), unique=True, nullable=False)
+#    titulo = db.Column(db.String(45), unique=False, nullable=False)
+#    delete = db.Column(db.SmallInteger,  unique=False, nullable=True)
+#    dt_public = db.Column(db.TIMESTAMP(6), unique=False, nullable=True)
 
 class Chatstats(db.Model):
     idtable1 =  db.Column(db.Integer, primary_key=True, autoincrement=True)
