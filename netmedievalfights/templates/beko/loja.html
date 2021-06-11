@@ -362,6 +362,7 @@ p
           <form method="POST" action="/lojacomprachat" >
             <input type="text" name="nome" value='{{row["nome"]}}' style="display: none">
             <b>Preço</b>: R$ {{row["preco"]}}
+            <input type="text" name="preco" value="{{row['preco']}}" style=" visibility: hidden;">
             <br><br>
 
             <b>Descrição</b>: {{row["descricao"]}}
@@ -427,8 +428,11 @@ p
    }
 </style>
 
- 
-    <img data-toggle="modal" data-target="#chat" src="https://clorofilaa.com.br/wp-content/uploads/2017/07/mail-1454734_960_720.png" id="whats-icon" style="width: 120px; height: 120px" >
+    {% if chatstatus == 1 %}
+    <img data-toggle="modal" data-target="#chat" src="static/page/mensagem.png" id="whats-icon" style="width: 120px; height: 120px" >
+    {% else %}
+    <img data-toggle="modal" data-target="#chat" src="static/page/nomensagem.png" id="whats-icon" style="width: 120px; height: 120px" >
+    {% endif %}
 
 
 <div class="modal fade" id="chat" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

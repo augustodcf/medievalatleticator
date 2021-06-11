@@ -22,8 +22,13 @@
 
 	Selecione um chat:
 	<select id="selecao">
+	<option value="/chat/{{ultimochat}}" >ultimo chat</option>
 	{% for eachuser in allusers.contents %}
+		{% if eachuser['chatstatus'] == 1 %}
+  <option value="/chat/{{eachuser['idUser']}}"  style="background-color:#7FFFD4">{{eachuser["username"]}}</option>
+  	{% else %}
   <option value="/chat/{{eachuser['idUser']}}" >{{eachuser["username"]}}</option>
+  	{% endif %}
   {% endfor %}
 	</select>
 	<button onclick="carregaessechat()">Go</button>
@@ -31,6 +36,7 @@
 
 
 <div id="chat">
+	<iframe src='/chat/{{ultimochat}}' ></iframe><form  method='POST' action='/chatresponde' ><input type='txt' name='mensagem'><input type='txt' name='username' style='visibility: hidden' value='/chat/{{ultimochat}}'><br><button>Enviar</button></form>
 </dic>
 
 

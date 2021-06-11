@@ -67,6 +67,7 @@ class Users(db.Model):
     power = db.Column(db.String(45), unique=False, nullable=True)
     dataNasc = db.Column(db.DateTime, unique=False, nullable=True)
     profilephoto = db.Column(db.String(255), unique=False, nullable=True)
+    admultimochat = db.Column(db.Integer,  unique=False, nullable=True)
 
     def is_authenticated(self):
         return self.authenticated
@@ -93,6 +94,12 @@ class News(db.Model):
     titulo = db.Column(db.String(45), unique=False, nullable=False)
     delete = db.Column(db.SmallInteger,  unique=False, nullable=True)
     dt_public = db.Column(db.TIMESTAMP(6), unique=False, nullable=True)
+
+class Chatstats(db.Model):
+    idtable1 =  db.Column(db.Integer, primary_key=True, autoincrement=True)
+    buynew =  db.Column(db.Integer, unique=False, nullable=True)
+    admnew =  db.Column(db.Integer, unique=False, nullable=True)
+    users_idUser =  db.Column(db.Integer, unique=True, nullable=False)
 
 class User_has_news(db.Model):
     user_has_news_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -466,12 +473,12 @@ def loja():
                         flash("Tamanho "+itemdoformulario.split('-')[0]+" adicionado com sucesso ao "+ novoprodutonobanco.name)
         flash("Produto adicionado com sucesso.")
 
-
+    statusdochat = Chatstats.query.filter_by(users_idUser=user.idUser).first()
 
     return render_template("beko/loja.html", username=user.username , userpower=user.power, userphoto=userphoto,
                            produtos=relacaodeprodutosvisiveis,
                            tamanhos=relacaodetamanhos,
-                           cores=relacaodecores,)
+                           cores=relacaodecores, chatstatus=statusdochat.admnew)
 
 @app.route("/lojacomprachat", methods=["GET", "POST"])
 def lojacomprachat():
@@ -484,9 +491,13 @@ def lojacomprachat():
         except FileNotFoundError:
             arquivo = open(nome_arquivo, 'w+')
         mensagemanteriores = arquivo.read()
-        arquivo.write(str(today)+" <b>"+str(user.username)+"</b> disse: Olá, fiquei interessado em um " + request.form["nome"] + " do tamanho " + request.form["tamanho"] + " e da cor " + request.form["cor"]+"<br><br>")
+        arquivo.write(str(today)+" <b>"+str(user.username)+"</b> disse: Olá, fiquei interessado em um " + request.form["nome"] + " do tamanho " + request.form["tamanho"] + " e da cor " + request.form["cor"]+". Ele custa R$" + request.form["preco"] + " na loja.<br><br>")
         # faca o que quiser
         arquivo.close()
+        statusdochat = Chatstats.query.filter_by(users_idUser=user.idUser).first()
+        statusdochat.buynew = 1
+        db.session.add(statusdochat)
+        db.session.commit()
     return redirect('/loja')
 
 @app.route("/chatresponde", methods=["GET", "POST"])
@@ -500,6 +511,7 @@ def chatresponde():
             donodochat = Users.query.filter_by(idUser=iddodono).first()
         else:
             donodochat = Users.query.filter_by(username=request.form["username"]).first()
+
         nome_arquivo = "templates/chat/"+str(donodochat.idUser)+".html"
         arquivo = open(nome_arquivo, 'r+')
         mensagemanteriores = arquivo.read()
@@ -507,25 +519,42 @@ def chatresponde():
         # faca o que quiser
         arquivo.close()
 
+        statusdochat = Chatstats.query.filter_by(users_idUser=donodochat.idUser).first()
         if user.idUser == donodochat.idUser:
+            statusdochat.buynew = 1
+            statusdochat.admnew = 0
+            db.session.add(statusdochat)
+            db.session.commit()
             return redirect('/loja')
         else:
+            user.admultimochat = donodochat.idUser
+            statusdochat.admnew = 1
+            statusdochat.buynew = 0
+            db.session.add(statusdochat)
+            db.session.commit()
             return redirect('/admchat')
 
 @app.route("/admchat", methods=["GET", "POST"])
 def admchat():
     user = Users.query.filter_by(idUser=str(current_user).strip('<>').replace('Users ', '')).first()
+    lastchat = 0
+    if user.admultimochat == None:
+        lastchat = user.idUser
+    else:
+        lastchat = user.admultimochat
     if user.power == "1":
-        allusers = {'headers': ['idUser', 'unsername'],
+        allusers = {'headers': ['idUser', 'unsername', 'chatstatus'],
                              'contents': []
                               }
         for eachuser in Users.query.filter_by():
+            statusdochat = Chatstats.query.filter_by(users_idUser=eachuser.idUser).first()
             dic = {
                 'idUser': eachuser.idUser,
                 'username': eachuser.username,
+                'chatstatus': statusdochat.buynew,
             }
             allusers['contents'].append(dic)
-        return render_template("admchat.html", allusers=allusers )
+        return render_template("admchat.html", allusers=allusers, ultimochat=lastchat )
     else:
         return "Você não pode ver essa página."
 
@@ -1338,6 +1367,12 @@ def register():
             user = Users(username=form.username.data, password=form.psw.data, email=form.email.data, power=power)
             db.session.add(user)
             db.session.commit()
+
+            esseuser = Users.query.filter_by(username=form.username.data).first()
+            chatdouser = Chatstats(users_idUser=esseuser.idUser)
+            db.session.add(chatdouser)
+            db.session.commit()
+
             return redirect(url_for('login'))
     return render_template('/beko/userregisterwtf.html', form=form)
 
