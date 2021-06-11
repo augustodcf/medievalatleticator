@@ -1,0 +1,26 @@
+{% extends 'beko/navbar.html' %}
+
+{%block content%}
+
+<head>
+    <title>Cadastro de Notícias</title>
+</head>
+<body>
+    <form action="/listanews" method="POST">
+        <div>
+            <h1>Cadastro de Notícias</h1>
+        </div>
+        <div class="form-group">
+            <div><label>Título</label>
+                <input type="text" name="titulo" id="titulo"></div>
+            <div><label>Conteúdo</label>
+                <input type="textarea" name="conteudo" id="conteudo"></div>
+             <div><label>Imagem</label>
+                <input type="file" name="imagem" id="img"></div>
+        </div>
+     <input type="submit" class="btn btn-primary btn-lg btn-submit" value="Cadastrar"/>
+     <a href="/home" ><input type="button" class="btn btn-primary btn-lg" value="Voltar"></a>
+    </form>
+</body>
+</html>
+{%endblock%}
