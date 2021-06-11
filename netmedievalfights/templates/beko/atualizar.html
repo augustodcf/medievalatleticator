@@ -1,0 +1,26 @@
+{% from "macros.html" import render_field %}
+
+{% extends "base.html" %}
+
+{% block content %}
+    <section class="container-center">
+        <form form action=" " enctype="multipart/form-data" method="post">
+            <div class="page-header">
+                <h1>Notícias</h1>
+            </div>
+            {{ form.csrf_token }}
+
+                <div class="form-group">
+
+                   <p>{{ render_field(form.titulo) }}</p>
+                    <p>{{ render_field(form.conteudo) }}</p>
+                   <p> {{ render_field(form.img) }}</p>
+                </div>
+
+                <div>
+                <input type="submit" class="btn btn-primary btn-lg" value="Atualizar">
+                <a href="/lista"><input type="button" class="btn btn-primary btn-lg" value="Voltar"></a>
+            </div><br>
+        </form>
+    </section>
+{% endblock %}

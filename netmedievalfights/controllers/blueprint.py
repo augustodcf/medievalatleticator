@@ -20,4 +20,3 @@
 #    @login_manager.unauthorized_handler
 #    def unauthorized():
 #        return redirect(url_for('frontend.unauthorized'))#, 401
-

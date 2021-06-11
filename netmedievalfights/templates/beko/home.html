@@ -1,9 +1,4 @@
 
-
-
-
-
-
 {% extends 'beko/navbar.html' %}
 {% block styles -%}
 
@@ -154,15 +149,7 @@ p
 
 {% block content %}
 
-<!--script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script-->
-
-
-
-
 <body >
-
 
 {# Loads some of the macros included with Flask-Bootstrap. We are using the
    utils module here to automatically render Flask's flashed messages in a
@@ -290,10 +277,6 @@ ul ul a {
 									function uploadphoto(){
 										document.getElementById('fileupload').name = "gif"
 									};
-									
-
-
-
 
 								</script>
 
@@ -346,7 +329,7 @@ ul ul a {
                     <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Adm</a>
                     <ul class="collapse list-unstyled" id="homeSubmenu">
                         <li>
-                            <a href="#">Cadastrar Notícias</a>
+                            <a href="/cadastrar">Cadastro de Notícias</a>
                         </li>
                         <li>
                             <a href="/admchat">Chat</a>
@@ -362,10 +345,8 @@ ul ul a {
                 </li>
                 
             </ul>
-
             
         </nav>
-
         <!-- Page Content  -->
         <div id="content">
 
