@@ -21,10 +21,10 @@
                 <tr>
                     <td>{{ news.news_id }}</td>
                     <td>{{ news.titulo }}</td>
-                    <td>{{ news.conteudo }}</td>
+                    <td><iframe src="/conteudonews/{{ news.news_id }}"></iframe></td>
                     <td><img style="width:100px" src='/static/page/{{news.img }}'></td>
-                    <td><a href="/excluir/{{ news.news_id }}">Remover</a></td>
-                    <td><a href="/atualizar/{{ news.news_id }}">Alterar</a></td>
+                    <td><a href="/excluirnews/{{ news.news_id }}">Remover</a></td>
+                    <td><a href="/atualizarnews/{{ news.news_id }}">Alterar</a></td>
                 </tr>
             </tbody>
         {% endfor %}

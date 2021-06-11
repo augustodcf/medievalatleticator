@@ -3,8 +3,10 @@
 {% extends 'beko/navbar.html' %}
 
 {% block content %}
+
+
     <section class="container-center">
-        <form action="/cadastrar" enctype="multipart/form-data" method="post">
+        <form action="/cadastrarnews" enctype="multipart/form-data" method="post">
             <div class="page-header">
                 <h1>Cadastro de Notícias</h1>
             </div>
@@ -19,7 +21,7 @@
 
                 <div>
                 <input type="submit" class="btn btn-primary btn-lg btn-submit" value="Salvar Cadastro"/>
-                <a href="/lista" ><input type="button" class="btn btn-primary btn-lg" value="Lista"></a>
+                <a href="/listanews" ><input type="button" class="btn btn-primary btn-lg" value="Lista"></a>
                 <a href="/home" ><input type="button" class="btn btn-primary btn-lg" value="Voltar"></a>
                 </div><br>
         </form>

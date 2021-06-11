@@ -23,7 +23,7 @@ if not os.path.exists(app.config['UPLOAD_FOLDER']):
 Bootstrap(app)
 Debug(app)
 app.secret_key = b"""_5#y2L"F4Q8z\n\xec]/"""
-app.config["SQLALCHEMY_DATABASE_URI"] = """mysql://root:123456@localhost/atleticator"""
+app.config["SQLALCHEMY_DATABASE_URI"] = """mysql://root:6=2Cxl{3t6}g[pD@localhost/atleticator"""
 db = SQLAlchemy(app)
 nav = Nav()
 
@@ -63,13 +63,12 @@ def load_user(user_id):
     return user
 
 
-#class News(db.Model):
-#    news_id =  db.Column(db.Integer, primary_key=True, autoincrement=True)
-#    img = db.Column(db.String(255), unique=True, nullable=False)
-#    htmlinterno = db.Column(db.String(45), unique=True, nullable=False)
-#    titulo = db.Column(db.String(45), unique=False, nullable=False)
-#    delete = db.Column(db.SmallInteger,  unique=False, nullable=True)
-#    dt_public = db.Column(db.TIMESTAMP(6), unique=False, nullable=True)
+class News(db.Model):
+    news_id =  db.Column(db.Integer, primary_key=True, autoincrement=True)
+    img = db.Column(db.String(255), unique=True, nullable=True)
+    htmlinterno = db.Column(db.String(45), unique=True, nullable=True)
+    titulo = db.Column(db.String(45), unique=False, nullable=False)
+    data = db.Column(db.TIMESTAMP(6), unique=False, nullable=True)
 
 class Chatstats(db.Model):
     idtable1 =  db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -542,61 +541,94 @@ def logout():
     return 'You are now logged out.'
 
 
-@app.route("/cadastrar", methods=["GET", "POST"])
-def cadastrar():
+@app.route("/cadastrarnews", methods=["GET", "POST"])
+def cadastrarnews():
     form = CadastroForm()
     if form.validate_on_submit():
-        n = News()
-        form.populate_obj(n)
-        db.session.add(n)
-        db.session.commit()
-
-        if form.validate_on_submit():
-            news = News.query.filter_by(titulo=n.titulo).first()
-            f = form.img.data
-            filename = secure_filename(f.filename)
-            f.filename = str(news.news_id) + 'news' + f.filename[-4::]
-            f.save(os.path.join(app.config['UPLOAD_FOLDER'], f.filename))
-            news.img = f.filename
-            db.session.add(news)
+        #passar parametros para o N
+        if News.query.filter_by(titulo=request.form["titulo"]).first() == None:
+            n = News()
+            n.titulo = request.form["titulo"]
+            db.session.add(n)
             db.session.commit()
+            news = News.query.filter_by(titulo=n.titulo).first()
+            nome_arquivo = "templates/news/" + str(news.news_id) + ".html"
+            try:
+                arquivo = open(nome_arquivo, 'r+')
+            except FileNotFoundError:
+                arquivo = open(nome_arquivo, 'w+')
+
+            arquivo = open(nome_arquivo, 'r+')
+            mensagemanteriores = arquivo.read()
+            arquivo.write(request.form["conteudo"])
+            # faca o que quiser
+            arquivo.close()
+            news.htmlinterno = nome_arquivo
+
+
+            if form.validate_on_submit():
+                f = form.img.data
+                filename = secure_filename(f.filename)
+                f.filename = str(news.news_id) + 'news' + f.filename[-4::]
+                f.save(os.path.join(app.config['UPLOAD_FOLDER'], f.filename))
+                news.img = f.filename
+                db.session.add(news)
+                db.session.commit()
+                flash("noticia cadastrada com sucesso!")
+                return redirect(url_for('home'))
+
 
     return render_template("/beko/cadastro.html", form=form)
 
 
-@app.route("/lista")
-def lista():
+@app.route("/listanews")
+def listanews():
     news = News.query.all()
     return render_template("/beko/lista.html", news=news)
 
 
-@app.route('/get-file/<filename>')
-def getFile(filename):
+@app.route('/get-filenews/<filename>')
+def getFilenews(filename):
     file = os.path.join(UPLOAD_FOLDER, filename + '.png')
     news = News.query.filter_by(img=request.form['img']).first()
     return send_file(file, mimetype="imagem/png")
 
 
-@app.route("/atualizar/<int:id>", methods=["GET", "POST"])
-def atualizar(id):
+@app.route("/atualizarnews/<int:id>", methods=["GET", "POST"])
+def atualizarnews(id):
     form = CadastroForm()
     news = News.query.filter_by(news_id=id).first()
 
     if form.validate_on_submit():
-        form.populate_obj(news)
+        news.titulo = request.form["titulo"]
+        nome_arquivo = "templates/news/" + str(news.news_id) + ".html"
+        arquivo = open(nome_arquivo, 'r+')
+        mensagemanteriores = arquivo.read()
+        arquivo.write(request.form["conteudo"])
+        # faca o que quiser
+        arquivo.close()
+        db.session.add(news)
         db.session.commit()
 
     form = CadastroForm()
-    form.insert_data(news)
-    return render_template("/beko/atualizar.html", form=form)
+    form.titulo = news.titulo
+    form.img = news.img
+    return render_template("/beko/atualizar.html", form=form, conteudo=news.htmlinterno)
 
 
-@app.route("/excluir/<int:id>")
-def excluir(id):
+@app.route("/excluirnews/<int:id>")
+def excluirnews(id):
     news = News.query.filter_by(news_id=id).first()
     db.session.delete(news)
     db.session.commit()
-    return redirect(url_for('lista'))
+    return redirect(url_for('listanews'))
+
+@app.route("/conteudonews/<string:PageAddresi>", methods=["GET", "POST"])
+def conteudonews(PageAddresi):
+
+    conteudonews = open("templates/news/" + str(PageAddresi) + ".html", "r")
+    return conteudonews.read()
+
 
 
 class CadastroForm(FlaskForm):
@@ -609,13 +641,6 @@ class CadastroForm(FlaskForm):
         self.conteudo.data = news.conteudo
         self.img.data = news.img
 
-
-class News(db.Model):
-    __tablename__ = "news"
-    news_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    titulo = db.Column(db.String)
-    conteudo = db.Column(db.String)
-    img = db.Column(db.String)
 
 
 app.run(debug=True, host='localhost')
