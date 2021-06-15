@@ -1,2 +1,2 @@
 # medievalatleticator
-atleticatos baseado no medieval fights
+atleticator baseado no medieval fights
