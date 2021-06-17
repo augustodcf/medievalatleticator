@@ -453,7 +453,9 @@ def home():
         db.session.add(user)
         db.session.commit()
 
-    return render_template("beko/home.html", username=user.username, userpower=user.power, userphoto=userphoto)
+    news = News.query.all()
+
+    return render_template("beko/home.html", username=user.username, userpower=user.power, userphoto=userphoto, news=news)
 
 
 @app.route("/terms")
